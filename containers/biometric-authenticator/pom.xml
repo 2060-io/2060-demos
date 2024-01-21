@@ -52,9 +52,9 @@
   </dependencyManagement>
   <dependencies>
   <dependency> 
- <groupId>io.twentysixty</groupId>
-  <artifactId>2060-service-agent-java-client</artifactId>
-  <version>2.0-quarkus3</version>
+ <groupId>io.2060</groupId>
+  <artifactId>service-agent-java-client</artifactId>
+  <version>2.0.0</version>
   </dependency>
   <dependency>
             <groupId>com.sun.mail</groupId>
@@ -198,31 +198,4 @@
       </properties>
     </profile>
   </profiles>
-  <repositories>
-    
-  
-  <repository>
-    <id>gitlab-maven-2060-group</id>
-    <url>${CI_API_V4_URL}/groups/80/-/packages/maven</url>
-  </repository>
-  
-  
-  <repository>
-    <id>sa-java-client-unauth</id>
-    <url>https://gitlab.mobiera.com/api/v4/projects/298/packages/maven</url>
-  </repository>
-  
-  </repositories>
-  
-<!--
-<distributionManagement>
-  <repository>
-    <id>gitlab-maven</id>
-    <url>${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/maven</url>
-  </repository>
-  <snapshotRepository>
-    <id>gitlab-maven</id>
-    <url>${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/maven</url>
-  </snapshotRepository>
-</distributionManagement>-->
 </project>
