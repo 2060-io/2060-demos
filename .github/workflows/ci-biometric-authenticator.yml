@@ -1,0 +1,41 @@
+## A basic GitHub Actions workflow for your Quarkus application.
+
+name: CI build biometric-authenticator
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+    - 'containers/biometric-authenticator/**'
+    - '.github/workflows/containers/ci-biometric-authenticator.yml'
+  pull_request:
+    branches: [ main ]
+    paths: 
+    - 'containers/biometric-authenticator/**'
+    - '.github/workflows/containers/ci-biometric-authenticator.yml'
+  workflow_dispatch:
+
+env:
+  QUARKUS_CONTAINER_IMAGE_USERNAME: ${{ secrets.DOCKER_HUB_LOGIN }}
+  QUARKUS_CONTAINER_IMAGE_PASSWORD: ${{ secrets.DOCKER_HUB_PWD }}
+  QUARKUS_CONTAINER_IMAGE_TAG: ${GITHUB_REF_NAME}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout gh-repo
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: temurin
+          cache: maven
+        
+      - name: Build
+        run: |
+          cd containers/biometric-authenticator
+          ./mvnw package -B
+          docker image ls
