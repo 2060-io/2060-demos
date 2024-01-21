@@ -1,6 +1,6 @@
 ## A basic GitHub Actions workflow for your Quarkus application.
 
-name: CI build
+name: CI build hello-world
 
 on:
   push:
