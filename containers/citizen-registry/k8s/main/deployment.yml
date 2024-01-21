@@ -1,0 +1,206 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+   name: gaiaid-registry
+   namespace: demos-main
+   labels:
+      app: nginx
+spec:
+   serviceName: "gaiaid-registry"
+   replicas: 1
+   selector:
+      matchLabels:
+         app: gaiaid-registry
+   template:
+      metadata:
+         labels:
+            app: gaiaid-registry
+      spec:
+         initContainers:
+         - name: volume-mount-hack
+           image: busybox
+           command: ["sh", "-c", "if test -f /var/lib/artemis-instance/etc/broker.xml; then sed \"s|<redelivery-delay>0</redelivery-delay>|<redelivery-delay>60000</redelivery-delay><redelivery-delay-multiplier>1.5</redelivery-delay-multiplier><max-redelivery-delay>21600000</max-redelivery-delay>|g\" < /var/lib/artemis-instance/etc/broker.xml > /var/lib/artemis-instance/etc/broker.xml.new && mv /var/lib/artemis-instance/etc/broker.xml.new /var/lib/artemis-instance/etc/broker.xml; fi && chown -R 1001:1001 /var/lib/artemis-instance "]
+           volumeMounts:
+           - name: gaiaid-registry-artemis-pv-main
+             mountPath: /var/lib/artemis-instance
+         - name: volume-gid-ds
+           image: busybox
+           command: ["sh", "-c", "chown -R 185:0 /home/data"]
+           volumeMounts:
+           - name: gaiaid-registry-data-store-main
+             mountPath: /home/data
+         containers:
+         -  name: gaiaid-registry-artemis
+            image: apache/activemq-artemis
+            imagePullPolicy: Always
+            env:
+            - name: ARTEMIS_USER
+              value: "quarkus"
+            - name: ARTEMIS_PASSWORD
+              value: "Quar2060enbPi26"
+            volumeMounts:
+            - name: gaiaid-registry-artemis-pv-main
+              mountPath: /var/lib/artemis-instance
+            ports:
+            -  containerPort: 8161
+            -  containerPort: 61616
+            -  containerPort: 5672
+         -  name: gaiaid-registry-sa-container
+            image: gitlab.mobiera.com:4567/2060/2060-service-agent:main
+            imagePullPolicy: Always
+            env:
+            - name: AGENT_ENDPOINT
+              value: "wss://registry.demos.m.2060.io:443"
+            - name: AGENT_NAME
+              value: "GaiaID Registry (main)"
+            - name: AGENT_INVITATION_IMAGE_URL
+              value: "https://q.registry.demos.m.2060.io/gaia.png"
+            - name: EVENTS_BASE_URL
+              value: "http://localhost:2903"
+            - name: AGENT_PUBLIC_DID
+              value: "did:web:registry.demos.m.2060.io"
+            - name: ANONCREDS_SERVICE_BASE_URL
+              value: "https://registry.demos.m.2060.io"
+            volumeMounts:
+            - name: gaiaid-registry-sa-pv-main
+              mountPath: /root/.afj
+            ports:
+            -  containerPort: 3000
+            -  containerPort: 3001
+         -  name: gaiaid-registry-backend-container
+            image: gitlab.mobiera.com:4567/2060-demos/registry:main
+            imagePullPolicy: Always
+            env:
+            - name: SERVICE_AGENT_ADMIN_BASE_URL
+              value: "http://localhost:3000"
+            - name: PUBLIC_BASE_URL
+              value: "https://registry.demos.m.2060.io"
+            - name: PNVS_SERVICE_AGENT_ADMIN_BASE_URL
+              value: "https://a.registry.demos.m.2060.io"
+            - name: DEBUG
+              value: "1"
+            - name: QUARKUS_HTTP_PORT
+              value: "2903"
+            - name: "IO_GAIAID_VISION_REDIRDOMAIN"
+              value: "registry.demos.m.2060.io"
+            - name: IO_TWENTYSIXTY_SA_RES_C_MESSAGERESOURCE_MP_REST_URL
+              value: "http://localhost:3000"
+            - name: IO_TWENTYSIXTY_SA_RES_C_CREDENTIALTYPERESOURCE_MP_REST_URL
+              value: "http://localhost:3000"
+            - name: IO_GAIAID_REGISTRY_RES_C_MEDIARESOURCE_MP_REST_URL
+              value: "http://localhost:2904"
+            - name: QUARKUS_SWAGGER_UI_ALWAYS_INCLUDE
+              value: "1"
+            - name: IO_GAIAID_VISION_FACE_CAPTURE_URL
+              value: "https://vision-t.gaiaid.io/face/capture/?token=TOKEN"
+            - name: IO_GAIAID_VISION_FACE_VERIFICATION_URL
+              value: "https://vision-t.gaiaid.io/face/verification/?token=TOKEN"
+            - name: IO_GAIAID_IDENTITY_DEF_NAME
+              value: "Gaia Identity"
+            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_CITIZENID
+              value: "0"
+            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_FIRSTNAME
+              value: "1"
+            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_LASTNAME
+              value: "1"
+            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_AVATARNAME
+              value: "0"
+            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_AVATARPIC
+              value: "0"
+            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_AVATARPIC_MAXDIMENSION
+              value: "320"
+            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_BIRTHDATE
+              value: "1"
+            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_BIRTHPLACE
+              value: "1"
+            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_PHOTO
+              value: "1"
+            - name: IO_GAIAID_IDENTITY_RESTORE_CLAIM_CITIZENID
+              value: "0"
+            - name: IO_GAIAID_IDENTITY_RESTORE_CLAIM_FIRSTNAME
+              value: "1"
+            - name: IO_GAIAID_IDENTITY_RESTORE_CLAIM_LASTNAME
+              value: "1"
+            - name: IO_GAIAID_IDENTITY_RESTORE_CLAIM_AVATARNAME
+              value: "0"
+            - name: IO_GAIAID_IDENTITY_RESTORE_CLAIM_BIRTHDATE
+              value: "1"
+            - name: IO_GAIAID_IDENTITY_RESTORE_CLAIM_BIRTHPLACE
+              value: "1"
+            ports:
+            -  containerPort: 2903
+         -  name: gaiaid-registry-data-store-container
+            image: gitlab.mobiera.com:4567/2060/2060-data-store:main
+            imagePullPolicy: Always
+            env:
+            - name: DEBUG
+              value: "1"
+            - name: QUARKUS_HTTP_PORT
+              value: "2904"
+            - name: IO_TWENTYSIXTY_DATASTORE_TMP_DIR
+              value: "/home/data/tmp"
+            - name: IO_TWENTYSIXTY_DATASTORE_TMP_LIFETIMEDAYS
+              value: "5"
+            - name: IO_TWENTYSIXTY_DATASTORE_REPO_LIFETIMEDAYS
+              value: "43800"              
+            - name: IO_TWENTYSIXTY_DATASTORE_REPO_FS_DIR
+              value: "/home/data/repo"
+            - name: IO_TWENTYSIXTY_DATASTORE_MEDIA_MAXCHUNKS
+              value: "128"
+            ports:
+            -  containerPort: 2904
+            volumeMounts:
+            - name: gaiaid-registry-data-store-main
+              mountPath: /home/data
+         -  name: postgres
+            image: postgres:15.2
+            imagePullPolicy: Always
+            env:
+            - name: POSTGRES_PASSWORD
+              value: "2060demo"
+            - name: POSTGRES_USER
+              value: "gaia"
+            - name: PGDATA
+              value: "/var/lib/postgresql/data/pgdata"
+            ports:
+            -  containerPort: 5432
+            volumeMounts:
+            - name: gaiaid-registry-pg-pv-main
+              mountPath: /var/lib/postgresql/data
+         imagePullSecrets:
+         -  name: registry-credentials
+         -  name: 2060-registry-credentials
+
+   volumeClaimTemplates: 
+   - metadata:
+       name: gaiaid-registry-artemis-pv-main
+     spec:
+       accessModes:
+       - "ReadWriteOnce"
+       resources:
+         requests:
+           storage: 1Gi
+   - metadata:
+       name: gaiaid-registry-sa-pv-main
+     spec:
+       accessModes:
+       - "ReadWriteOnce"
+       resources:
+         requests:
+           storage: 1Gi
+   - metadata:
+       name: gaiaid-registry-pg-pv-main
+     spec:
+       accessModes:
+       - "ReadWriteOnce"
+       resources:
+         requests:
+           storage: 1Gi
+   - metadata:
+       name: gaiaid-registry-data-store-main
+     spec:
+       accessModes:
+       - "ReadWriteOnce"
+       resources:
+         requests:
+           storage: 1Gi

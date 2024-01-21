@@ -1,0 +1,57 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gaiaid-registry
+  namespace: demos-dev
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - registry.demos.dev.2060.io
+        - a.registry.demos.dev.2060.io
+        - q.registry.demos.dev.2060.io
+        - d.registry.demos.dev.2060.io
+      secretName: registry.demos.dev.2060.io-cert
+  rules:
+    - host: registry.demos.dev.2060.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                 name: gaiaid-registry
+                 port:
+                   number: 3001
+    - host: a.registry.demos.dev.2060.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                 name: gaiaid-registry
+                 port:
+                   number: 3000
+    - host: q.registry.demos.dev.2060.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                 name: gaiaid-registry
+                 port:
+                   number: 2903
+    - host: d.registry.demos.dev.2060.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                 name: gaiaid-registry
+                 port:
+                   number: 2904
