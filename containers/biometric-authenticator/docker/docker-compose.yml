@@ -1,0 +1,78 @@
+version: '3.3'
+
+services:
+
+  artemis:
+    image: joylife/apache-artemis:2.20.0
+    ports:
+      - "8161:8161"
+      - "61616:61616"
+      - "5672:5672"
+    restart: unless-stopped
+    environment:
+      - ARTEMIS_USER=quarkus
+      - ARTEMIS_PASSWORD=Quar2060enbPi26
+#    volumes:
+#      - /tmp/artemis/artemis-instance:/var/lib/artemis-instance
+#       - ./artemis/etc-override:/var/lib/artemis-instance/etc-override
+    networks:
+       - chatbot
+
+  service-agent:
+    
+    image: gitlab.mobiera.com:4567/2060/2060-service-agent:dev
+
+    networks:
+      - chatbot
+    ports:
+      - 2600:3000
+      - 2601:3001
+    environment:
+      - AGENT_PUBLIC_DID=did:web:p2601.ovpndev.2060.io
+      - AGENT_ENDPOINT=wss://p2601.ovpndev.2060.io
+      - ANONCREDS_SERVICE_BASE_URL=https://p2601.ovpndev.2060.io
+      - AGENT_INVITATION_IMAGE_URL=https://p2603.ovpndev.2060.io/avatar.png
+      - AGENT_NAME=Auth Demo (mj)
+      - USE_CORS=true
+      - EVENTS_BASE_URL=https://p2603.ovpndev.2060.io
+    volumes:
+       - /tmp/afj:/root/.afj
+  
+  postgres:
+    image: postgres:15.2
+    networks:
+      - chatbot
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=2060demo
+      - POSTGRES_USER=gaia 
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+       - /tmp/postgresql:/var/lib/postgresql/data
+
+  datastore:
+    image: gitlab.mobiera.com:4567/2060/2060-data-store:dev
+    ports:
+       - "2604:2604"
+    restart: unless-stopped
+    environment:
+    - DEBUG=1
+    - QUARKUS_HTTP_PORT=2604
+    - IO_TWENTYSIXTY_DATASTORE_TMP_DIR=/tmp/data/tmp
+    - IO_TWENTYSIXTY_DATASTORE_TMP_LIFETIMEDAYS=5
+    - IO_TWENTYSIXTY_DATASTORE_REPO_LIFETIMEDAYS=43800
+    - IO_TWENTYSIXTY_DATASTORE_REPO_FS_DIR=/tmp/data/repo
+    - IO_TWENTYSIXTY_DATASTORE_MEDIA_MAXCHUNKS=128
+    volumes:
+       - /tmp/data:/tmp/data
+    networks:
+       - "chatbot"
+
+
+networks:
+  chatbot:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/27

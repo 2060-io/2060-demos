@@ -7,7 +7,7 @@
   <version>1.0.0</version>
   <name>Citizen Registry</name>
   <description>A real DIDcomm citizen registry</description>
-  <url>https://github.com/2060-io/didcomm-service-demos</url>
+  <url>https://github.com/2060-io/2060-demos</url>
   <licenses>
     <license>
       <name>The Apache License, Version 2.0</name>
@@ -23,9 +23,9 @@
     </developer>
   </developers>
   <scm>
-    <connection>scm:git:git://github.com/2060-io/didcomm-service-demos.git</connection>
-    <developerConnection>scm:git:ssh://github.com/2060-io/didcomm-service-demos.git</developerConnection>
-    <url>https://github.com/2060-io/didcomm-service-demos/tree/main</url>
+    <connection>scm:git:git://github.com/2060-io/2060-demos.git</connection>
+    <developerConnection>scm:git:ssh://github.com/2060-io/2060-demos.git</developerConnection>
+    <url>https://github.com/2060-io/2060-demos/tree/main</url>
   </scm>
    
   <properties>
