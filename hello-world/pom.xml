@@ -5,32 +5,28 @@
   <groupId>io.twentysixty.demos</groupId>
   <artifactId>hello-world</artifactId>
   <version>1.0.0</version>
-  
   <name>heelo World Demo Container</name>
-   <description>A simple DIDComm demo conversational service</description>
-   <url>https://github.com/2060-io/didcomm-service-demos</url>
-   <licenses>
-      <license>
-         <name>The Apache License, Version 2.0</name>
-         <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-      </license>
-   </licenses>
-   <developers>
-      <developer>
-         <name>Fabrice Rochette</name>
-         <email>f@2060.io</email>
-         <organization>2060 OÜ</organization>
-         <organizationUrl>https://2060.io</organizationUrl>
-      </developer>
-   </developers>
-   <scm>
-      <connection>scm:git:git://github.com/2060-io/didcomm-service-demos.git</connection>
-      <developerConnection>scm:git:ssh://github.com/2060-io/didcomm-service-demos.git</developerConnection>
-      <url>https://github.com/2060-io/service-agent-java-client/tree/main</url>
-   </scm>
-   
-   
-   
+  <description>A simple DIDComm demo conversational service</description>
+  <url>https://github.com/2060-io/didcomm-service-demos</url>
+  <licenses>
+    <license>
+      <name>The Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <name>Fabrice Rochette</name>
+      <email>f@2060.io</email>
+      <organization>2060 OÜ</organization>
+      <organizationUrl>https://2060.io</organizationUrl>
+    </developer>
+  </developers>
+  <scm>
+    <connection>scm:git:git://github.com/2060-io/didcomm-service-demos.git</connection>
+    <developerConnection>scm:git:ssh://github.com/2060-io/didcomm-service-demos.git</developerConnection>
+    <url>https://github.com/2060-io/service-agent-java-client/tree/main</url>
+  </scm>
   <properties>
     <compiler-plugin.version>3.10.1</compiler-plugin.version>
     <maven.compiler.release>17</maven.compiler.release>
@@ -54,12 +50,11 @@
     </dependencies>
   </dependencyManagement>
   <dependencies>
-   <dependency> 
- <groupId>io.2060</groupId>
-  <artifactId>service-agent-java-client</artifactId>
-  <version>2.0.0</version>
-  </dependency>
-  
+    <dependency>
+      <groupId>io.2060</groupId>
+      <artifactId>service-agent-java-client</artifactId>
+      <version>2.0.0</version>
+    </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-arc</artifactId>
@@ -69,9 +64,9 @@
       <artifactId>quarkus-resteasy</artifactId>
     </dependency>
     <dependency>
-    <groupId>org.jboss.resteasy</groupId>
-    <artifactId>resteasy-multipart-provider</artifactId>
-</dependency>
+      <groupId>org.jboss.resteasy</groupId>
+      <artifactId>resteasy-multipart-provider</artifactId>
+    </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-resteasy-jackson</artifactId>
@@ -80,20 +75,20 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-openapi</artifactId>
     </dependency>
-    
-    
     <dependency>
-    <groupId>io.quarkus</groupId>
-    <artifactId>quarkus-rest-client</artifactId>
-</dependency>
- 
-     <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-rest-client</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.graalvm.sdk</groupId>
       <artifactId>graal-sdk</artifactId>
     </dependency>
-     
     <dependency>
-<groupId>io.quarkus</groupId>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-container-image-jib</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5</artifactId>
       <scope>test</scope>
     </dependency>
@@ -174,5 +169,4 @@
       </properties>
     </profile>
   </profiles>
-  
 </project>
