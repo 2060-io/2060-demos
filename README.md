@@ -1,3 +1,3 @@
 # didcomm-service-demos
 
-DIDComm conversational service (Chatbots) demos
+DIDComm conversational service demos (Chatbots)
