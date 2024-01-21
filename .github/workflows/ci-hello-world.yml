@@ -5,8 +5,14 @@ name: CI build
 on:
   push:
     branches: [ main ]
+    paths:
+    - 'hello-world/**'
+    - '.github/workflows/ci-hello-world.yml'
   pull_request:
     branches: [ main ]
+    paths: 
+    - 'hello-world/**'
+    - '.github/workflows/ci-hello-world.yml'
   workflow_dispatch:
 
 env:
