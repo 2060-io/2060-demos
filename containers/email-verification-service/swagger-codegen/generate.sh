@@ -1,1 +1,0 @@
-java -jar swagger-codegen-cli.jar generate -i /Users/mj/git/2060/2060-service-agent/src/routes/swagger.json  -l java -o 2060-service-agent-java-api --api-package io.twentysixty.serviceagent.api --model-package io.twentysixty.serviceagent.model
