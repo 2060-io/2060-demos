@@ -1,5 +1,7 @@
 #!/bin/sh
 
+echo starting quarkus
+
 java \
   -Xmx128m  \
   -Dquarkus.http.host=0.0.0.0 \
