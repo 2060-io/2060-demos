@@ -1,4 +1,4 @@
-name: generate plantuml
+name: generate plantuml citizen-registry
 on: push
 jobs:
   generate_plantuml:
@@ -13,7 +13,7 @@ jobs:
       id: plantuml
       uses: grassedge/generate-plantuml-action@v1.5
       with:
-        path: containers, containers/citizen-registry, containers/biometric-authenticator
+        path: containers/citizen-registry
         message: "Render PlantUML files"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
