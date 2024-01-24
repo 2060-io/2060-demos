@@ -11,7 +11,7 @@ on:
     paths: 
     - 'containers/citizen-registry/**'
     - '.github/workflows/containers/plantuml-citizen-registry.yml'
-  
+
 jobs:
   generate_plantuml:
     runs-on: ubuntu-latest
