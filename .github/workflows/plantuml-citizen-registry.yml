@@ -2,7 +2,7 @@ name: generate plantuml citizen-registry
 on: 
   push
     branches: [ main ]
-      paths:
+    paths:
       - 'containers/citizen-registry/**'
   pull_request:
     branches: [ main ]
