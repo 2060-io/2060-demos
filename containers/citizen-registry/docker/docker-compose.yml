@@ -3,7 +3,7 @@ version: '3.3'
 services:
 
   artemis:
-    image: joylife/apache-artemis:2.20.0
+    image: apache/activemq-artemis
     ports:
       - "8161:8161"
       - "61616:61616"
@@ -12,31 +12,32 @@ services:
     environment:
       - ARTEMIS_USER=quarkus
       - ARTEMIS_PASSWORD=Quar2060enbPi26
-#    volumes:
-#      - /tmp/artemis/artemis-instance:/var/lib/artemis-instance
-#       - ./artemis/etc-override:/var/lib/artemis-instance/etc-override
     networks:
        - chatbot
+    volumes:
+      - /tmp/citizen-registry/artemis/artemis-instance:/var/lib/artemis-instance
 
   service-agent:
-    
     image: gitlab.mobiera.com:4567/2060/2060-service-agent:dev
-
     networks:
       - chatbot
     ports:
-      - 2600:3000
-      - 2601:3001
+      - 3000:3000
+      - 3001:3001
     environment:
-      - AGENT_PUBLIC_DID=did:web:p2601.ovpndev.2060.io
-      - AGENT_ENDPOINT=wss://p2601.ovpndev.2060.io
-      - ANONCREDS_SERVICE_BASE_URL=https://p2601.ovpndev.2060.io
-      - AGENT_INVITATION_IMAGE_URL=https://p2603.ovpndev.2060.io/avatar.png
+    # here replace 59cd-190-24-98-158.ngrok-free.app with the domain name that will forward 
+      - AGENT_PUBLIC_DID=did:web:59cd-190-24-98-158.ngrok-free.app
+#      - AGENT_ENDPOINT=wss://p2601.ovpndev.2060.io
+      - AGENT_ENDPOINT=wss://59cd-190-24-98-158.ngrok-free.app
+#      - ANONCREDS_SERVICE_BASE_URL=https://p2601.ovpndev.2060.io
+      - ANONCREDS_SERVICE_BASE_URL=https://59cd-190-24-98-158.ngrok-free.app
+      - AGENT_INVITATION_IMAGE_URL=https://04e8-190-24-98-158.ngrok-free.app/avatar.png
+#      - AGENT_INVITATION_IMAGE_URL=https://p2603.ovpndev.2060.io/avatar.png
       - AGENT_NAME=Gaia Registry Service (mj)
       - USE_CORS=true
-      - EVENTS_BASE_URL=https://p2603.ovpndev.2060.io
+      - EVENTS_BASE_URL=https://04e8-190-24-98-158.ngrok-free.app
     volumes:
-       - /tmp/afj:/root/.afj
+       - /tmp/citizen-registry/afj:/root/.afj
   
   postgres:
     image: postgres:15.2
@@ -49,12 +50,12 @@ services:
       - POSTGRES_USER=gaia 
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
-       - /tmp/postgresql:/var/lib/postgresql/data
+       - /tmp/citizen-registry/postgresql:/var/lib/postgresql/data
 
   datastore:
-    image: gitlab.mobiera.com:4567/2060/2060-data-store:dev
+    image: io2060/2060-datastore:main
     ports:
-       - "2604:2604"
+       - "2904:2904"
     restart: unless-stopped
     environment:
     - DEBUG=1

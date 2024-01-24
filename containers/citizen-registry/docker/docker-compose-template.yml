@@ -1,0 +1,89 @@
+version: '3.3'
+
+services:
+  artemis:
+    image: apache/activemq-artemis
+    ports:
+      - "8161:8161"
+      - "61616:61616"
+      - "5672:5672"
+    restart: unless-stopped
+    environment:
+      - ARTEMIS_USER=quarkus
+      - ARTEMIS_PASSWORD=Quar2060enbPi26
+    networks:
+       - chatbot
+    volumes:
+      - /tmp/citizen-registry/artemis/artemis-instance:/var/lib/artemis-instance
+
+# the service-agent is the container that will handle all the didcomm messaging.
+# Your backend will use it to send and receive messages, receive new connection notifications, issue credentials, verify credentials,...
+# Port 3000 provide an internal API for your backend and should only be visible by your backend. For details regarding the service agent API, go to http://localhost:3000 after having started the container.
+# Port 3001 must be publicly available through a https public URL. DIDComm messaging App will connect to this public endpoint.
+  service-agent:
+    image: gitlab.mobiera.com:4567/2060/2060-service-agent:dev
+    networks:
+      - chatbot
+    ports:
+      - 3000:3000
+      - 3001:3001
+    environment:
+# set service-agent did:web domain: here replace p3001.testing.2060.io with the ngrok domain name that will forward to port 3001
+      - AGENT_PUBLIC_DID=did:web:p3001.testing.2060.io
+# set service-agent websocket public endpoint: here replace p3001.testing.2060.io with the ngrok domain name that will forward to port 3001
+      - AGENT_ENDPOINT=wss://p3001.testing.2060.io
+# set service-agent agent websocket public endpoint: here replace p3001.testing.2060.io with the ngrok domain name that will forward to port 3001
+      - ANONCREDS_SERVICE_BASE_URL=https://p3001.testing.2060.io
+# set service-agent icon image: here replace p2903.testing.2060.io with the ngrok domain name that will forward to port 2903 (the backend project you will run locally)
+# make sure an avatar.png image is present in src/main/resources/META-INF/resources of the backend project
+      - AGENT_INVITATION_IMAGE_URL=https://p2903.testing.2060.io/avatar.png
+# set service-agent service name
+      - AGENT_NAME=Gaia Registry Service (mj)
+      - USE_CORS=true
+# where to send the receive events: here replace p2903.testing.2060.io with the ngrok domain name that will forward to port 2903 (the backend project you will run locally)
+      - EVENTS_BASE_URL=https://p2903.testing.2060.io
+    volumes:
+       - /tmp/citizen-registry/afj:/root/.afj
+  
+  postgres:
+    image: postgres:15.2
+    networks:
+      - chatbot
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=2060demo
+      - POSTGRES_USER=gaia 
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+       - /tmp/citizen-registry/postgresql:/var/lib/postgresql/data
+
+# the datastore is the container that will store identity photos.
+# Normally it should not be exposed directly to a public URL, 
+# but for this demo, and for beeing able to use the face capture/face recognition service,
+# we will need it.
+  datastore:
+    image: io2060/2060-datastore:main
+    ports:
+       - "2604:2604"
+    restart: unless-stopped
+    environment:
+    - DEBUG=1
+    - QUARKUS_HTTP_PORT=2604
+    - IO_TWENTYSIXTY_DATASTORE_TMP_DIR=/tmp/data/tmp
+    - IO_TWENTYSIXTY_DATASTORE_TMP_LIFETIMEDAYS=5
+    - IO_TWENTYSIXTY_DATASTORE_REPO_LIFETIMEDAYS=43800
+    - IO_TWENTYSIXTY_DATASTORE_REPO_FS_DIR=/tmp/data/repo
+    - IO_TWENTYSIXTY_DATASTORE_MEDIA_MAXCHUNKS=128
+    volumes:
+       - /tmp/data:/tmp/data
+    networks:
+       - "chatbot"
+
+
+networks:
+  chatbot:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/27
