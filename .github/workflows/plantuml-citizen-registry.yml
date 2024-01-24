@@ -20,12 +20,12 @@ jobs:
     - name: checkout
       uses: actions/checkout@v1
       with:
-        fetch-depth: 0
+        fetch-depth: 1
     - name: plantuml
       id: plantuml
       uses: grassedge/generate-plantuml-action@v1.5
       with:
-        path: containers/citizen-registry/README.md
+        path: containers/citizen-registry
         message: "Render PlantUML files"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
