@@ -2,12 +2,12 @@ name: generate plantuml citizen-registry
 
 on: 
   push:
-    branches: [ main ]
+    branches: [ dev ]
     paths:
     - 'containers/citizen-registry/**'
     - '.github/workflows/plantuml-citizen-registry.yml'
   pull_request:
-    branches: [ main ]
+    branches: [ dev ]
     paths: 
     - 'containers/citizen-registry/**'
     - '.github/workflows/plantuml-citizen-registry.yml'
