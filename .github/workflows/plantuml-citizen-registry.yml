@@ -1,5 +1,14 @@
 name: generate plantuml citizen-registry
-on: push
+on: 
+  push
+    branches: [ main ]
+      paths:
+      - 'containers/citizen-registry/**'
+  pull_request:
+    branches: [ main ]
+    paths: 
+    - 'containers/citizen-registry/**'
+  
 jobs:
   generate_plantuml:
     runs-on: ubuntu-latest
@@ -17,3 +26,4 @@ jobs:
         message: "Render PlantUML files"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
