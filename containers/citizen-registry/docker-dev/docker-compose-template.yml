@@ -21,7 +21,7 @@ services:
 # Port 3000 provide an internal API for your backend and should only be visible by your backend. For details regarding the service agent API, go to http://localhost:3000 after having started the container.
 # Port 3001 must be publicly available through a https public URL. DIDComm messaging App will connect to this public endpoint.
   service-agent:
-    image: gitlab.mobiera.com:4567/2060/2060-service-agent:dev
+    image: io2060/2060-service-agent:main
     networks:
       - chatbot
     ports:

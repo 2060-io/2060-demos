@@ -1,18 +1,28 @@
 # Government Citizen Registry - Verifiable ID Card
 
-A plug-in demo module for building a DIDcomm conversational service (chatbot) to deliver Verifiable ID Cards to citizen.
-Configurable as a true government-ready service, or as an AvatarID service.
+## Purpose of the service
 
+A demo module for building DIDcomm conversational services (chatbots) to issue Verifiable ID Cards to citizen by verifying their face against photo stored in a database.
 
-## Create your digital identity
+In these demos, and because we are not connected to a true government database of citizens, you use the conversational service to create a fake digital Identity that you protect with your face biometrics. A corresponding Verifiable Credential of your Identity is issued to you.
 
-In this demo, you create a digital Identity that you will protect with your face biometrics.
+Then, as soon as you've got you Verifiable Credential, you can present your credential to identify yourself and access passwordless services such as the [biometric-authenticator]() demos.
 
-Get issued a verifiable credential of your identity. Present your credential to identify yourself and access passwordless services.
+If you loose you cellphone, then can restore your Identity by simply re-connecting to the Registry service, verifying your face, and recover your Verifiable Credential.
+
+## Try the demo(s)
+
+Several use cases of Citizen Registries have been deployed for your convenience. Just download the Hologram Messenger in the App Store or Google play and scan the QR code of the service you would like to try:
+
+- GaiaID Identity Registry: a government-like registry service. Test URL: [https://gaiaid.io](https://gaiaid.io)
+- Colombia Registraduría (spanish chatbot): a demo registry service for the colombian citizen registry. Test URL: [https://colombia.demos.m.2060.io](https://colombia.demos.m.2060.io)
+- AvatarID Registry: create your Avatar and protect it with your face biometrics. Test URL: [https://avatar.demos.m.2060.io](https://avatar.demos.m.2060.io)
+
+All these demos are just an instance of the same citizen-registry service with customized settings. You can easily create your own demo for your country by jumping to the [kubernetes howto]() documentation.
 
 ## Recover your identity
 
-Lost your device? Flash again the service QR code and restore your Identity.
+Lost your device? Flash again the service's QR code and restore your Identity.
 
 ## Try Identity Registry
 
@@ -30,7 +40,7 @@ You can easily create your own demo by forking one of the demo projects registry
 
 ## Government Citizen Registry architecture
 
-```plantuml
+```plantuml:arch
 @startuml
 
 actor "End-user" as Enduser
@@ -64,7 +74,7 @@ GAIA --> AA
 
 @enduml
 ```
-
+![](./arch.svg)
 
 ## How to use API for Vision Service integration
 
