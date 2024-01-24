@@ -1,12 +1,6 @@
-# Getting started with docker
+# Setting up a development environment with docker
 
-## Prerequisites
-
-### Install Hologram DIDcomm messaging Mobile App
-
-Find the Hologram Messenger App on Playstore or App Store
-
-### Setup a SSL port forwarding service
+## Setup a SSL port forwarding service
 
 For beeing able to test the service directly from your cellphone, you will need a port forwarding service.
 In this exemple, we will use the ngrok service. The free version of ngrok is enough.
@@ -54,7 +48,7 @@ Forwarding                    https://11ee-190-24-98-158.ngrok-free.app -> http:
 Forwarding                    https://59cd-190-24-98-158.ngrok-free.app -> http://localhost:3001
 ```
 
-### Prepare docker-compose and start the containers
+## Prepare docker-compose and start the containers
 
 Copy the docker-compose-template file to docker.compose.yml and set your nrogk endpoints
 
@@ -167,7 +161,7 @@ ee0e59f83606   apache/activemq-artemis                               "/docker-ru
 ```
 
 
-### Edit application.properties and start Quarkus backend
+## Edit application.properties and start Quarkus backend
 
 edit src/main/resources/application.properties so that the vision service will know about your chatbot:
 
@@ -177,9 +171,20 @@ edit src/main/resources/application.properties so that the vision service will k
 # here replace p3001.testing.2060.io with the ngrok domain name that will forward to port 2904 (the datastore container) 
 %dev.io.gaiaid.vision.redirdomain.d=p2604.testing.2060.io
 ```
+start quarkus:
+
+```
+$ ./mvnw clean quarkus:dev
+```
 
 ### Scan the Agent QR Code with the Hologram App and start using your service
 
-- With your browser, connect to the service-agent public endpoint (the ngrok URL that forwards to port 3001)
+- With your browser, connect to the service-agent public endpoint (the ngrok URL that forwards to port 3001) and append /qr
 - scan the QR code to create the connection
-- start to interact with your service.
+
+![QR Code](browser.png)
+
+- accept the invitation and use the service
+
+![Invitation](invitation.jpg)
+![Chat](chat.jpg)
