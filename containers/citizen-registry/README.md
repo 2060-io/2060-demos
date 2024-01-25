@@ -1,150 +1,87 @@
 # Government Citizen Registry - Verifiable ID Card
 
+![2060 logo](https://raw.githubusercontent.com/2060-io/.github/44bf28569fec0251a9367a9f6911adfa18a01a7c/profile/assets/2060_logo.svg)
+
 ## Purpose of the service
 
-A demo module for building DIDcomm conversational services (chatbots) to issue Verifiable ID Cards to citizen by verifying their face against photo stored in a database.
+A demo module for building DIDcomm conversational services (chatbots) to issue Verifiable ID Cards to citizens by verifying their face against photo(s) stored in a database.
+
+Using a conversational service for issuing Verifiable Credentials has many benefits:
+
+- **time needed** for developing the service is reduced.
+- **security**: it is more secure that issuing a credential through a web browser, as in our case everything is exchanged over a secure DIDComm session, no javascript, no cookies.
+- **security**: it is only required to open the TCP port of the DIDComm service.
+
+A conversational DIDComm service is probably **the most secure way of delivering Verifiable Credentials**.
 
 In these demos, and because we are not connected to a true government database of citizens, you use the conversational service to create a fake digital Identity that you protect with your face biometrics. A corresponding Verifiable Credential of your Identity is issued to you.
 
-Then, as soon as you've got you Verifiable Credential, you can present your credential to identify yourself and access passwordless services such as the [biometric-authenticator]() demos.
+Then, as soon as you've got you Verifiable Credential, you can use it to identify yourself and access passwordless services such as the [biometric-authenticator]() demos.
 
-If you loose you cellphone, then can restore your Identity by simply re-connecting to the Registry service, verifying your face, and recover your Verifiable Credential.
+## Device lost, app uninstalled?
+
+If you loose you cellphone or delete the App, then can restore your Identity by simply re-connecting to the same Registry service, verifying your face, and recover your Verifiable Credential.
+
+## Service Architecture
+
+![](arch.svg)
+
+Note: at the moment face capture/verification is performed by connecting to a web link. This will change in a near future when the 2060-webrtc module will be available and corresponding support added to the Hologram Wallet & Messenger App.
 
 ## Try the demo(s)
 
-Several use cases of Citizen Registries have been deployed for your convenience. Just download the Hologram Messenger in the App Store or Google play and scan the QR code of the service you would like to try:
+Several use cases of Citizen Registries have been deployed for your convenience. Just download the Hologram Messenger in the App Store or Google play and scan the QR code of the service you would like to try. All these demos are just an instance of the same citizen-registry service with customized settings. You can easily create your own demo for your country by jumping to the [kubernetes howto]() documentation.
 
-- GaiaID Identity Registry: a government-like registry service. Test URL: [https://gaiaid.io](https://gaiaid.io)
-- Colombia Registraduría (spanish chatbot): a demo registry service for the colombian citizen registry. Test URL: [https://colombia.demos.m.2060.io](https://colombia.demos.m.2060.io)
-- AvatarID Registry: create your Avatar and protect it with your face biometrics. Test URL: [https://avatar.demos.m.2060.io](https://avatar.demos.m.2060.io)
+### GaiaID Identity Registry
 
-All these demos are just an instance of the same citizen-registry service with customized settings. You can easily create your own demo for your country by jumping to the [kubernetes howto]() documentation.
+a government-like registry service. Test URL: [https://gaiaid.io](https://gaiaid.io)
 
-## Recover your identity
+#### Scan the QR code
 
-Lost your device? Flash again the service's QR code and restore your Identity.
+![GaiaID](https://gaia.demos.m.2060.io/qr?size=300&bcolor=FFFFFF&balpha=1&fcolor=000000&falpha=1)
 
-## Try Identity Registry
+#### Accept the Invitation
 
-Flash QR with 2060 mobile App.
+<img src="assets/IMG_7719.PNG" alt="invitation" style="height:500px; border: 1px solid #EEEEEE;"/>
+<img src="assets/IMG_7720.PNG" alt="invitation" style="height:500px; border: 1px solid #EEEEEE;"/>
 
-Demo services are provided with Vision Service module (face capture / recognition).
+#### Create the Identity
 
+Go to contextual menu and select "Create an Identity"
 
-- [Gaia Registry](https://gaia.demos.m.2060.io/qr)
+<img src="assets/IMG_7721.PNG" alt="invitation" style="height:500px; border: 1px solid #EEEEEE;"/>
+<img src="assets/IMG_7722.PNG" alt="invitation" style="height:500px; border: 1px solid #EEEEEE;"/>
 
-- [AvatarID](https://avatar.demos.m.2060.io/qr)
+#### Capture your face
 
-You can easily create your own demo by forking one of the demo projects registry-gaia, registry-avatar
+<img src="assets/IMG_7723.PNG" alt="invitation" style="height:500px; border: 1px solid #EEEEEE;"/>
+<img src="assets/IMG_7724.PNG" alt="invitation" style="height:500px; border: 1px solid #EEEEEE;"/>
 
+#### Verify your face
 
-## Government Citizen Registry architecture
+Now you verify your face, just to be sure capture was OK.
 
-```plantuml:arch
-@startuml
+<img src="assets/IMG_7725.PNG" alt="invitation" style="height:500px; border: 1px solid #EEEEEE;"/>
+<img src="assets/IMG_7726.PNG" alt="invitation" style="height:500px; border: 1px solid #EEEEEE;"/>
 
-actor "End-user" as Enduser
+#### Receive your ID Card
 
-[2060 Cloud Agent] as CA
-
-rectangle "2060 Mobile App" as App {
-  [2060 Mobile Agent] as MA
-}
-
-
-rectangle "Government Citizen Registry" {
-    [2060 Service Agent] as VS
-    [2060 Data Store] as DS
-    [Postgres] as PS
-    [Apache Artemis] as AA
-    [Government Citizen Registry Backend] as GAIA
-    [Vision Services] as VISION
-}
-
-MA --> VS
-App --> VISION
-VISION --> GAIA
-VISION --> DS
-App <--> Enduser
-VS <--> GAIA
-VS --> CA
-MA <-- CA
-GAIA --> PS
-GAIA --> AA
-
-@enduml
-```
-![](./arch.svg)
-
-## How to use API for Vision Service integration
-
-Use the API if you want to integrate your own Vision Service.
-
-### Face Recognition
-
-#### New Identity
-
-- Scan https://registry.dev.gaiaid.io/qr with the 2060 App
-- Use the contextual menu and select "create a new identity"
-- When bot requests a protection method, choose Face Recognition
-- You will receive a URL with a token.
-
-Keep track of this token. You'll need it later.
-
-- Perform capture of user's face and use the datastore API https://d.registry.dev.gaiaid.io/q/swagger-ui/ to save the captured picture(s).
-See datastore API' documentation on gitlab: https://gitlab.mobiera.com/2060/2060-data-store/-/tree/dev?ref_type=heads 
-Save UUID of created media.
-
-- call /link method of gaia's vision service API https://q.registry.dev.gaiaid.io/q/swagger-ui/ to link the created medias with the corresponding identity by using the token.
-- call /success method to finish.
-- in case of a problem (cannot capture, slow link,...), call /failure.
-- done.
-
-Use FACE for the type field of the API.
+<img src="assets/IMG_7727.PNG" alt="invitation" style="height:500px; border: 1px solid #EEEEEE;"/>
+<img src="assets/IMG_7728.PNG" alt="invitation" style="height:500px; border: 1px solid #EEEEEE;"/>
 
 
-#### Verify user
+### AvatarID Registry
 
+create your Avatar and protect it with your face biometrics. Test URL: [https://i.avatar.demos.m.2060.io](https://i.avatar.demos.m.2060.io)
 
-- Scan https://registry.dev.gaiaid.io/qr with the 2060 App
-- Use the contextual menu and select "restore an identity"
-- When bot requests a protection method, choose Face Recognition
-- You will receive a URL with a token.
-- call /list method of gaia's vision service API https://q.registry.dev.gaiaid.io/q/swagger-ui/ to get the list of existing pictures of the identity represented by this token.
-- perform face recognition.
-- if face recognition is successful, call /success service. You can create new media links with /link at any time (for ex for each successful recognition).
-- if face recognition does not work, call /failure
+Service is similar to the GaiaID one.
 
-Use FACE for the type field of the API.
+![AvatarID](https://avatar.demos.m.2060.io/qr?size=300&bcolor=FFFFFF&balpha=1&fcolor=000000&falpha=1)
 
+## Deploy your own demo for your country
 
+Go to the [kubernetes-howto]() section.
 
-## Running the application in dev mode
+## Setup a development environment
 
-Use the docker-compose example file in /docker to run artemis, postgres and the 2060-service-agent.
-
-You can run your application in dev mode that enables live coding using:
-```shell script
-./mvnw compile quarkus:dev
-```
-
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
-
-## Packaging and running the application
-
-The application can be packaged using:
-```shell script
-./mvnw package
-```
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
-
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
-```shell script
-./mvnw package -Dquarkus.package.type=uber-jar
-```
-
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
-
+Please refer to [these instructions](docker-dev/README.md).

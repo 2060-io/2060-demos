@@ -1,9 +1,14 @@
 # Setting up a development environment with docker
 
+![2060 logo](https://raw.githubusercontent.com/2060-io/.github/44bf28569fec0251a9367a9f6911adfa18a01a7c/profile/assets/2060_logo.svg)
+
+In this document, you will learn how to setup a development environment for working/modifying the citizen-registry backend.
+If you want to quickly deploy a clone or customize of one of the Citizen Registry demos, you'd better jump to the [kubernetes howto]() documentation.
+
 ## Setup a SSL port forwarding service
 
-For beeing able to test the service directly from your cellphone, you will need a port forwarding service.
-In this exemple, we will use the ngrok service. The free version of ngrok is enough.
+For being able to test your service directly from your cellphone, you will need a port forwarding service.
+In this example, we will use the ngrok service. The free version of ngrok is enough for what we need.
 
 First, follow installation instructions on ngrok web site. Then edit your ngrok config file, add your authtoken and configure the tunnel section with the following:
 
@@ -182,9 +187,10 @@ $ ./mvnw clean quarkus:dev
 - With your browser, connect to the service-agent public endpoint (the ngrok URL that forwards to port 3001) and append /qr
 - scan the QR code to create the connection
 
-![QR Code](browser.png)
+![QR Code](assets/browser.png)
 
 - accept the invitation and use the service
 
-![Invitation](invitation.jpg)
-![Chat](chat.jpg)
+<img src="assets/IMG_7715.PNG" alt="invitation" style="height:500px; border: 1px solid #EEEEEE;"/>
+<img src="assets/IMG_7716.PNG" alt="invitation" style="height:500px; border: 1px solid #EEEEEE;"/>
+
