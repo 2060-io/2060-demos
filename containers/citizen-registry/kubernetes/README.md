@@ -18,9 +18,6 @@ Just clone one of these directories, customize it and you're done!
 
 All files in k8s directory should be customized.
 
-### 2060-service-agent container
-
-
 ## Deploy
 
 ```
