@@ -50,26 +50,33 @@ a government-like registry service. Test URL: [https://gaiaid.io](https://gaiaid
 
 Go to contextual menu and select "Create an Identity"
 
+<kbd>
 <img src="assets/IMG_7721.PNG" alt="invitation" style="height:500px; border: 1px solid #EEEEEE;"/>
 <img src="assets/IMG_7722.PNG" alt="invitation" style="height:500px; border: 1px solid #EEEEEE;"/>
+</kbd>
 
 #### Capture your face
 
+<kbd>
 <img src="assets/IMG_7723.PNG" alt="invitation" style="height:500px; border: 1px solid #EEEEEE;"/>
 <img src="assets/IMG_7724.PNG" alt="invitation" style="height:500px; border: 1px solid #EEEEEE;"/>
+</kbd>
 
 #### Verify your face
 
 Now you verify your face, just to be sure capture was OK.
 
+<kbd>
 <img src="assets/IMG_7725.PNG" alt="invitation" style="height:500px; border: 1px solid #EEEEEE;"/>
 <img src="assets/IMG_7726.PNG" alt="invitation" style="height:500px; border: 1px solid #EEEEEE;"/>
+</kbd>
 
 #### Receive your ID Card
 
+<kbd>
 <img src="assets/IMG_7727.PNG" alt="invitation" style="height:500px; border: 1px solid #EEEEEE;"/>
 <img src="assets/IMG_7728.PNG" alt="invitation" style="height:500px; border: 1px solid #EEEEEE;"/>
-
+</kbd>
 
 ### AvatarID Registry
 
