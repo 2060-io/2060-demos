@@ -4,7 +4,7 @@ name: CI build avatar-front
 
 on:
   push:
-    branches: [ main, dev ]
+    branches: [ dev ]
     paths:
     - 'containers/citizen-registry/kubernetes/registry-avatar/**'
     - '.github/workflows/ci-registry-avatar.yml'

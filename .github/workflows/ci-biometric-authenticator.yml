@@ -4,12 +4,12 @@ name: CI build biometric-authenticator
 
 on:
   push:
-    branches: [ main ]
+    branches: [ dev ]
     paths:
     - 'containers/biometric-authenticator/**'
     - '.github/workflows/containers/ci-biometric-authenticator.yml'
   pull_request:
-    branches: [ main ]
+    branches: [ main, dev ]
     paths: 
     - 'containers/biometric-authenticator/**'
     - '.github/workflows/containers/ci-biometric-authenticator.yml'

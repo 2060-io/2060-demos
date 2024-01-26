@@ -4,12 +4,12 @@ name: CI build hello-world
 
 on:
   push:
-    branches: [ main ]
+    branches: [ dev ]
     paths:
     - 'containers/hello-world/**'
     - '.github/workflows/containers/ci-hello-world.yml'
   pull_request:
-    branches: [ main ]
+    branches: [ main, dev ]
     paths: 
     - 'containers/hello-world/**'
     - '.github/workflows/containers/ci-hello-world.yml'

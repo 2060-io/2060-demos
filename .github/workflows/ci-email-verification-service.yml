@@ -4,12 +4,12 @@ name: CI build email-verification-service
 
 on:
   push:
-    branches: [ main ]
+    branches: [ dev ]
     paths:
     - 'containers/email-verification-service/**'
     - '.github/workflows/containers/ci-email-verification-service.yml'
   pull_request:
-    branches: [ main ]
+    branches: [ main, dev ]
     paths: 
     - 'containers/email-verification-service/**'
     - '.github/workflows/containers/ci-email-verification-service.yml'

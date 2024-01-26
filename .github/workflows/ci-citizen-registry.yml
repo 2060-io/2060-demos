@@ -4,12 +4,12 @@ name: CI build citizen-registry
 
 on:
   push:
-    branches: [ main ]
+    branches: [ dev ]
     paths:
     - 'containers/citizen-registry/**'
     - '.github/workflows/containers/ci-citizen-registry.yml'
   pull_request:
-    branches: [ main ]
+    branches: [ main, dev ]
     paths: 
     - 'containers/citizen-registry/**'
     - '.github/workflows/containers/ci-citizen-registry.yml'
