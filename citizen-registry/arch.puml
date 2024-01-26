@@ -1,0 +1,33 @@
+@startuml
+
+actor "End-user" as Enduser
+
+[2060 Cloud Agent] as CA
+
+rectangle "Hologram Wallet & Messenger" as App {
+  [2060 Mobile Agent] as MA
+}
+
+
+rectangle "Government Citizen Registry Service" {
+    [2060 Service Agent] as VS
+    [2060 Data Store] as DS
+    [Postgres] as PS
+    [Apache Artemis] as AA
+    [Government Citizen Registry Backend (**this project**)] as GAIA
+    [Vision Services] as VISION
+}
+
+MA --> VS
+App --> VISION
+VISION --> GAIA
+VISION --> DS
+GAIA --> DS
+App <--> Enduser
+VS <--> GAIA
+VS --> CA
+MA <-- CA
+GAIA --> PS
+GAIA --> AA
+
+@enduml

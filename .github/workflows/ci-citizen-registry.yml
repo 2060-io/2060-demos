@@ -4,15 +4,15 @@ name: CI build citizen-registry
 
 on:
   push:
-    branches: [ main ]
+    branches: [ dev ]
     paths:
-    - 'containers/citizen-registry/**'
-    - '.github/workflows/containers/ci-citizen-registry.yml'
+    - 'citizen-registry/**'
+    - '.github/workflows/ci-citizen-registry.yml'
   pull_request:
-    branches: [ main ]
+    branches: [ main, dev ]
     paths: 
-    - 'containers/citizen-registry/**'
-    - '.github/workflows/containers/ci-citizen-registry.yml'
+    - 'citizen-registry/**'
+    - '.github/workflows/ci-citizen-registry.yml'
   workflow_dispatch:
 
 env:
@@ -36,6 +36,6 @@ jobs:
         
       - name: Build
         run: |
-          cd containers/citizen-registry
+          cd citizen-registry
           ./mvnw package -B
           docker image ls

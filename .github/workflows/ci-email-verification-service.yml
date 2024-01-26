@@ -4,15 +4,15 @@ name: CI build email-verification-service
 
 on:
   push:
-    branches: [ main ]
+    branches: [ dev ]
     paths:
-    - 'containers/email-verification-service/**'
-    - '.github/workflows/containers/ci-email-verification-service.yml'
+    - 'email-verification-service/**'
+    - '.github/workflows/ci-email-verification-service.yml'
   pull_request:
-    branches: [ main ]
+    branches: [ main, dev ]
     paths: 
-    - 'containers/email-verification-service/**'
-    - '.github/workflows/containers/ci-email-verification-service.yml'
+    - 'email-verification-service/**'
+    - '.github/workflows/ci-email-verification-service.yml'
   workflow_dispatch:
 
 env:
@@ -36,6 +36,6 @@ jobs:
         
       - name: Build
         run: |
-          cd containers/email-verification-service
+          cd email-verification-service
           ./mvnw package -B
           docker image ls

@@ -1,0 +1,48 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gaia-public
+  namespace: demos-main
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - gaiaid.io
+        - gaia.demos.m.2060.io
+        - i.gaia.demos.m.2060.io
+      secretName: public.gaia.demos.m.2060.io-cert
+  rules:
+    - host: gaia.demos.m.2060.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                 name: gaia
+                 port:
+                   number: 3001
+    - host: i.gaia.demos.m.2060.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                 name: gaia
+                 port:
+                   number: 80
+    - host: gaiaid.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                 name: gaia
+                 port:
+                   number: 80
+
+
