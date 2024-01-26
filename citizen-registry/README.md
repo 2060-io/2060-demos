@@ -80,7 +80,7 @@ Now you verify your face, just to be sure capture was OK.
 
 ### AvatarID Registry
 
-create your Avatar and protect it with your face biometrics. Test URL: [https://i.avatar.demos.m.2060.io](https://i.avatar.demos.m.2060.io)
+create your Avatar and protect it with your face biometrics. Test URL: [https://avatar.demos.m.2060.io/qr](https://avatar.demos.m.2060.io/qr)
 
 Service is similar to the GaiaID one.
 
