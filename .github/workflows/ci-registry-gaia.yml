@@ -7,12 +7,12 @@ on:
     branches: [ main, dev ]
     paths:
     - 'containers/citizen-registry/kubernetes/registry-gaia/**'
-    - '.github/workflows/containers/ci-registry-gaia.yml'
+    - '.github/workflows/ci-registry-gaia.yml'
   pull_request:
     branches: [ main, dev ]
     paths: 
     - 'containers/citizen-registry/kubernetes/registry-gaia/**'
-    - '.github/workflows/containers/ci-registry-gaia.yml'
+    - '.github/workflows/ci-registry-gaia.yml'
   workflow_dispatch:
 
 env:
