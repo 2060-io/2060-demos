@@ -1,0 +1,36 @@
+## A basic GitHub Actions workflow for your Quarkus application.
+
+name: CI build avatar-front
+
+on:
+  push:
+    branches: [ main, dev ]
+    paths:
+    - 'containers/citizen-registry/kubernetes/registry-avatar/**'
+    - '.github/workflows/containers/ci-registry-avatar.yml'
+  pull_request:
+    branches: [ main, dev ]
+    paths: 
+    - 'containers/citizen-registry/kubernetes/registry-avatar/**'
+    - '.github/workflows/containers/ci-registry-avatar.yml'
+  workflow_dispatch:
+
+env:
+  DH_USERNAME: ${{ secrets.DOCKER_HUB_LOGIN }}
+  DH_TOKEN: ${{ secrets.DOCKER_HUB_PWD }}
+  IMAGE_TAG: ${GITHUB_REF##*/}
+  IMAGE_NAME: "2060-demos-avatar-front"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout gh-repo
+        uses: actions/checkout@v3
+  
+      - name: Build
+        run: |
+          cd containers/citizen-registry/kubernetes/registry-avatar/
+          docker login -u $DH_USERNAME -p $DH_TOKEN
+          echo "Build and push 2060-demos-avatar-front image for docker hub..."
+          docker build -f Dockerfile -t $IMAGE_NAME:$IMAGE_TAG .
+          docker push $IMAGE_NAME:$IMAGE_TAG
