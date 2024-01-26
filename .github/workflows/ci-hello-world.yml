@@ -6,13 +6,13 @@ on:
   push:
     branches: [ dev ]
     paths:
-    - 'containers/hello-world/**'
-    - '.github/workflows/containers/ci-hello-world.yml'
+    - 'hello-world/**'
+    - '.github/workflows/ci-hello-world.yml'
   pull_request:
     branches: [ main, dev ]
     paths: 
     - 'containers/hello-world/**'
-    - '.github/workflows/containers/ci-hello-world.yml'
+    - '.github/workflows/ci-hello-world.yml'
   workflow_dispatch:
 
 env:
@@ -36,6 +36,6 @@ jobs:
         
       - name: Build
         run: |
-          cd containers/hello-world
+          cd hello-world
           ./mvnw package -B
           docker image ls

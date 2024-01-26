@@ -6,13 +6,13 @@ on:
   push:
     branches: [ dev ]
     paths:
-    - 'containers/biometric-authenticator/**'
-    - '.github/workflows/containers/ci-biometric-authenticator.yml'
+    - 'biometric-authenticator/**'
+    - '.github/workflows/ci-biometric-authenticator.yml'
   pull_request:
     branches: [ main, dev ]
     paths: 
-    - 'containers/biometric-authenticator/**'
-    - '.github/workflows/containers/ci-biometric-authenticator.yml'
+    - 'biometric-authenticator/**'
+    - '.github/workflows/ci-biometric-authenticator.yml'
   workflow_dispatch:
 
 env:
@@ -36,6 +36,6 @@ jobs:
         
       - name: Build
         run: |
-          cd containers/biometric-authenticator
+          cd biometric-authenticator
           ./mvnw package -B
           docker image ls
