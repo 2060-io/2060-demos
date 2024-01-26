@@ -191,6 +191,7 @@ $ ./mvnw clean quarkus:dev
 
 - accept the invitation and use the service
 
+<kbd>
 <img src="assets/IMG_7715.PNG" alt="invitation" style="height:500px; border: 1px solid #EEEEEE;"/>
 <img src="assets/IMG_7716.PNG" alt="invitation" style="height:500px; border: 1px solid #EEEEEE;"/>
-
+</kbd>
