@@ -2,11 +2,11 @@
 
 ![2060 logo](https://raw.githubusercontent.com/2060-io/.github/44bf28569fec0251a9367a9f6911adfa18a01a7c/profile/assets/2060_logo.svg)
 
-Examples of DIDComm conversational services (chatbot).
+Examples of DIDComm conversational services (chatbots).
 
 ## Hello World
 
-The most simple chatbot example.
+The simplest chatbot example.
 
 [hello-world - demo and details here](hello-world/README.md)
 
