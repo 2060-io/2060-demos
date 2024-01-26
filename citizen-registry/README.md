@@ -41,9 +41,10 @@ a government-like registry service. Test URL: [https://gaiaid.io](https://gaiaid
 ![GaiaID](https://gaia.demos.m.2060.io/qr?size=300&bcolor=FFFFFF&balpha=1&fcolor=000000&falpha=1)
 
 #### Accept the Invitation
-
-<img src="assets/IMG_7719.PNG" alt="invitation" style="height:500px; border: 1px solid #EEEEEE;"/>
+<kbd>
+<img src="assets/IMG_7719.PNG" alt="invitation" border:"1" style="height:500px; border: 1px solid #EEEEEE;"/>
 <img src="assets/IMG_7720.PNG" alt="invitation" style="height:500px; border: 1px solid #EEEEEE;"/>
+</kbd>
 
 #### Create the Identity
 
