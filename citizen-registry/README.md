@@ -80,7 +80,7 @@ Service is similar to the GaiaID one.
 
 ## Deploy your own demo for your country
 
-Go to the [kubernetes-howto]() section.
+Go to the [kubernetes-howto](kubernetes/README.md) section.
 
 ## Setting up a development environment
 
