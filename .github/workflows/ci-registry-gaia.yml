@@ -1,0 +1,36 @@
+## A basic GitHub Actions workflow for your Quarkus application.
+
+name: CI build gaia-front
+
+on:
+  push:
+    branches: [ main, dev ]
+    paths:
+    - 'containers/citizen-registry/kubernetes/registry-gaia/**'
+    - '.github/workflows/containers/ci-registry-gaia.yml'
+  pull_request:
+    branches: [ main, dev ]
+    paths: 
+    - 'containers/citizen-registry/kubernetes/registry-gaia/**'
+    - '.github/workflows/containers/ci-registry-gaia.yml'
+  workflow_dispatch:
+
+env:
+  DH_USERNAME: ${{ secrets.DOCKER_HUB_LOGIN }}
+  DH_TOKEN: ${{ secrets.DOCKER_HUB_PWD }}
+  IMAGE_TAG: ${GITHUB_REF_NAME}
+  IMAGE_NAME: "2060-demos-gaia-front"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout gh-repo
+        uses: actions/checkout@v3
+  
+      - name: Build
+        run: |
+          cd containers/citizen-registry/kubernetes/registry-gaia/
+          docker login -u $DH_USERNAME -p $DH_TOKEN
+          echo "Build and push 2060-demos-gaia-front image for docker hub..."
+          docker build -f Dockerfile -t $IMAGE_NAME:$IMAGE_TAG .
+          docker push $IMAGE_NAME:$IMAGE_TAG

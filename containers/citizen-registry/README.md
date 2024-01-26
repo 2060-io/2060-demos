@@ -82,6 +82,6 @@ Service is similar to the GaiaID one.
 
 Go to the [kubernetes-howto]() section.
 
-## Setup a development environment
+## Setting up a development environment
 
 Please refer to [these instructions](docker-dev/README.md).

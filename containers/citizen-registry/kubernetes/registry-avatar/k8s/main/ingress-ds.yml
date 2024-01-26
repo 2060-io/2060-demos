@@ -1,0 +1,37 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: avatar-ds
+  namespace: demos-main
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/whitelist-source-range: "51.79.89.27/32"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - q.avatar.demos.m.2060.io
+        - d.avatar.demos.m.2060.io
+      secretName: ds-avatar.demos.m.2060.io-cert
+  rules:
+    - host: q.avatar.demos.m.2060.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                 name: avatar
+                 port:
+                   number: 2903
+    - host: d.avatar.demos.m.2060.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                 name: avatar
+                 port:
+                   number: 2904
+

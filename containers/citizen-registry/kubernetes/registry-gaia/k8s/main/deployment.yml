@@ -1,0 +1,202 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+   name: gaia
+   namespace: demos-main
+   labels:
+      app: nginx
+spec:
+   serviceName: "gaia"
+   replicas: 1
+   selector:
+      matchLabels:
+         app: gaia
+   template:
+      metadata:
+         labels:
+            app: gaia
+      spec:
+         initContainers:
+         - name: volume-gid-ds
+           image: busybox
+           command: ["sh", "-c", "chown -R 185:0 /home/data"]
+           volumeMounts:
+           - name: gaia-data-store-main
+             mountPath: /home/data
+         containers:
+         -  name: gaia-sa-container
+            image: io2060/2060-service-agent:main
+            imagePullPolicy: Always
+            env:
+            - name: AGENT_ENDPOINT
+              value: "wss://gaia.demos.m.2060.io:443"
+            - name: AGENT_NAME
+              value: "GaiaID Citizen Registry"
+            - name: AGENT_INVITATION_IMAGE_URL
+              value: "https://i.gaia.demos.m.2060.io/avatar.png"
+            - name: EVENTS_BASE_URL
+              value: "http://localhost:2903"
+            - name: AGENT_PUBLIC_DID
+              value: "did:web:gaia.demos.m.2060.io"
+            - name: ANONCREDS_SERVICE_BASE_URL
+              value: "https://gaia.demos.m.2060.io"
+            volumeMounts:
+            - name: gaia-sa-pv-main
+              mountPath: /root/.afj
+            ports:
+            -  containerPort: 3000
+            -  containerPort: 3001
+         -  name: gaia-backend-container
+            image: io2060/2060-demos-citizen-registry:main
+            imagePullPolicy: Always
+            env:
+            - name: SERVICE_AGENT_ADMIN_BASE_URL
+              value: "http://localhost:3000"
+            - name: PUBLIC_BASE_URL
+              value: "https://gaia.demos.m.2060.io"
+            - name: PNVS_SERVICE_AGENT_ADMIN_BASE_URL
+              value: "https://a.gaia.demos.m.2060.io"
+            - name: DEBUG
+              value: "1"
+            - name: QUARKUS_HTTP_PORT
+              value: "2903"
+            - name: IO_GAIAID_VISION_REDIRDOMAIN
+              value: "gaia.demos.m.2060.io"
+            - name: IO_TWENTYSIXTY_SA_RES_C_MESSAGERESOURCE_MP_REST_URL
+              value: "http://localhost:3000"
+            - name: IO_TWENTYSIXTY_SA_RES_C_CREDENTIALTYPERESOURCE_MP_REST_URL
+              value: "http://localhost:3000"
+            - name: IO_GAIAID_REGISTRY_RES_C_MEDIARESOURCE_MP_REST_URL
+              value: "http://localhost:2904"
+            - name: QUARKUS_SWAGGER_UI_ALWAYS_INCLUDE
+              value: "1"
+            - name: IO_GAIAID_VISION_FACE_CAPTURE_URL
+              value: "https://m.vision.2060.io/face/capture/?token=TOKEN"
+            - name: IO_GAIAID_VISION_FACE_VERIFICATION_URL
+              value: "https://m.vision.2060.io/face/verification/?token=TOKEN"
+            - name: IO_GAIAID_IDENTITY_DEF_NAME
+              value: "Identity Card"
+            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_CITIZENID
+              value: "0"
+            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_FIRSTNAME
+              value: "1"
+            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_LASTNAME
+              value: "1"
+            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_AVATARNAME
+              value: "0"
+            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_AVATARPIC
+              value: "0"
+            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_AVATARPIC_MAXDIMENSION
+              value: "640"
+            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_BIRTHDATE
+              value: "1"
+            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_BIRTHPLACE
+              value: "0"
+            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_PHOTO
+              value: "1"
+            - name: IO_GAIAID_IDENTITY_RESTORE_CLAIM_CITIZENID
+              value: "0"
+            - name: IO_GAIAID_IDENTITY_RESTORE_CLAIM_FIRSTNAME
+              value: "1"
+            - name: IO_GAIAID_IDENTITY_RESTORE_CLAIM_LASTNAME
+              value: "1"
+            - name: IO_GAIAID_IDENTITY_RESTORE_CLAIM_AVATARNAME
+              value: "0"
+            - name: IO_GAIAID_IDENTITY_RESTORE_CLAIM_BIRTHDATE
+              value: "1"
+            - name: IO_GAIAID_IDENTITY_RESTORE_CLAIM_BIRTHPLACE
+              value: "0"
+            - name: IO_GAIAID_LANGUAGE
+              value: "en"
+            - name: IO_GAIAID_MESSAGES_WELCOME
+              value: "🌎 Welcome to GaiaID! The place where you can create your Identity, protect it with your biometrics, and easily restore it if you loose your handset."
+            - name: IO_GAIAID_MESSAGES_WELCOME2
+              value: "This conversational service is provided as a demo service, no guarantee is made regarding uptime and/or data persistence. You can easily delete data of a created Identity by selecting the \"Delete Identity\" option in the contextual menu. Data is removed from our demo server 24h after Identity deletion."
+            - name: IO_GAIAID_MESSAGES_WELCOME3
+              value: "To get started, use the contextual menu above ↗️, and Create or Restore an Identity."
+            - name: IO_GAIAID_MESSAGES_ROOTMENU_TITLE
+              value: "GaiaID Citizen Registry"
+            - name: IO_GAIAID_JMS_MO_QUEUE_NAME
+              value: "gaiaid-mo"
+            - name: IO_GAIAID_JMS_MT_QUEUE_NAME
+              value: "gaiaid-mt"
+            - name: QUARKUS_ARTEMIS_URL
+              value: "tcp://artemis-broker-hdls-svc.activemq-artemis-operator:61616"
+            ports:
+            -  containerPort: 2903
+         -  name: gaia-data-store-container
+            image: io2060/2060-datastore:main
+            imagePullPolicy: Always
+            env:
+            - name: DEBUG
+              value: "1"
+            - name: QUARKUS_HTTP_PORT
+              value: "2904"
+            - name: IO_TWENTYSIXTY_DATASTORE_TMP_DIR
+              value: "/home/data/tmp"
+            - name: IO_TWENTYSIXTY_DATASTORE_TMP_LIFETIMEDAYS
+              value: "5"
+            - name: IO_TWENTYSIXTY_DATASTORE_REPO_LIFETIMEDAYS
+              value: "43800"              
+            - name: IO_TWENTYSIXTY_DATASTORE_REPO_FS_DIR
+              value: "/home/data/repo"
+            - name: IO_TWENTYSIXTY_DATASTORE_MEDIA_MAXCHUNKS
+              value: "128"
+            ports:
+            -  containerPort: 2904
+            volumeMounts:
+            - name: gaia-data-store-main
+              mountPath: /home/data
+         -  name: postgres
+            image: postgres:15.2
+            imagePullPolicy: Always
+            env:
+            - name: POSTGRES_PASSWORD
+              value: "2060demo"
+            - name: POSTGRES_USER
+              value: "gaia"
+            - name: PGDATA
+              value: "/var/lib/postgresql/data/pgdata"
+            ports:
+            -  containerPort: 5432
+            volumeMounts:
+            - name: gaia-pg-pv-main
+              mountPath: /var/lib/postgresql/data
+         -  name: gaia-gaia
+            image: io2060/2060-demos-gaia-front:main
+            imagePullPolicy: Always
+            ports:
+            -  containerPort: 80
+   volumeClaimTemplates: 
+   - metadata:
+       name: gaia-artemis-pv-main
+     spec:
+       accessModes:
+       - "ReadWriteOnce"
+       resources:
+         requests:
+           storage: 1Gi
+   - metadata:
+       name: gaia-sa-pv-main
+     spec:
+       accessModes:
+       - "ReadWriteOnce"
+       resources:
+         requests:
+           storage: 1Gi
+   - metadata:
+       name: gaia-pg-pv-main
+     spec:
+       accessModes:
+       - "ReadWriteOnce"
+       resources:
+         requests:
+           storage: 1Gi
+   - metadata:
+       name: gaia-data-store-main
+     spec:
+       accessModes:
+       - "ReadWriteOnce"
+       resources:
+         requests:
+           storage: 1Gi

@@ -1,0 +1,36 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: avatar-public
+  namespace: demos-main
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - avatar.demos.m.2060.io
+        - i.avatar.demos.m.2060.io
+      secretName: public.avatar.demos.m.2060.io-cert
+  rules:
+    - host: avatar.demos.m.2060.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                 name: avatar
+                 port:
+                   number: 3001
+    - host: i.avatar.demos.m.2060.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                 name: avatar
+                 port:
+                   number: 80
+

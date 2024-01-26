@@ -1,0 +1,31 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.image-container {
+    display: flex;
+    flex-direction: row;
+    place-items: center;
+}
+
+.vertical-images {
+    display: flex;
+    flex-direction: column;
+}
+
+.horizontal-images {
+    display: flex;
+    flex-direction: row;
+}
+
+@media (max-width: 767px) {
+    body {
+        min-width: 300px;
+        min-height: 300px;
+    }
+}
