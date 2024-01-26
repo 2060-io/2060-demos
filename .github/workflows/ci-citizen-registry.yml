@@ -35,6 +35,6 @@ jobs:
         
       - name: Build
         run: |
-          cd containers/citizen-registry
+          cd citizen-registry
           ./mvnw package -B -Dquarkus.container-image.tag=${GITHUB_REF##*/}
           docker image ls
