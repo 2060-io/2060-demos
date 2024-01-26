@@ -28,17 +28,17 @@ spec:
             image: io2060/2060-service-agent:main
             imagePullPolicy: Always
             env:
-            - name: AGENT_ENDPOINT
+            - name: AGENT_ENDPOINT # Service endpoint where Wallet will connect. Must accept upgraded https connections.
               value: "wss://gaia.demos.m.2060.io:443"
-            - name: AGENT_NAME
+            - name: AGENT_NAME # Name of the Service, as shown in user's Wallet
               value: "GaiaID Citizen Registry"
-            - name: AGENT_INVITATION_IMAGE_URL
+            - name: AGENT_INVITATION_IMAGE_URL # The icon (avatar) of the service. Here, we put the icon in the front-end container
               value: "https://i.gaia.demos.m.2060.io/avatar.png"
-            - name: EVENTS_BASE_URL
+            - name: EVENTS_BASE_URL # Url of the backend that will receive messages, events, etc
               value: "http://localhost:2903"
-            - name: AGENT_PUBLIC_DID
+            - name: AGENT_PUBLIC_DID # DID of the service. **Must** be same domain than service endpoint
               value: "did:web:gaia.demos.m.2060.io"
-            - name: ANONCREDS_SERVICE_BASE_URL
+            - name: ANONCREDS_SERVICE_BASE_URL # Base URL of the anoncreds service. **Must** be same domain than service endpoint
               value: "https://gaia.demos.m.2060.io"
             volumeMounts:
             - name: gaia-sa-pv-main
@@ -58,63 +58,66 @@ spec:
               value: "https://a.gaia.demos.m.2060.io"
             - name: DEBUG
               value: "1"
-            - name: QUARKUS_HTTP_PORT
+            - name: QUARKUS_HTTP_PORT # Port of the backend
               value: "2903"
-            - name: IO_GAIAID_VISION_REDIRDOMAIN
+            - name: IO_GAIAID_VISION_REDIRDOMAIN # Redirection base domain for the vision service. Used to send face capture/verification result to backend, and to access datastore container
               value: "gaia.demos.m.2060.io"
-            - name: IO_TWENTYSIXTY_SA_RES_C_MESSAGERESOURCE_MP_REST_URL
+            - name: IO_TWENTYSIXTY_SA_RES_C_MESSAGERESOURCE_MP_REST_URL # Local endpoint of the service-agent, for the backend to send messages, credentials,...
               value: "http://localhost:3000"
-            - name: IO_TWENTYSIXTY_SA_RES_C_CREDENTIALTYPERESOURCE_MP_REST_URL
+            - name: IO_TWENTYSIXTY_SA_RES_C_CREDENTIALTYPERESOURCE_MP_REST_URL # Local endpoint of the service-agent, for the credential type querying
               value: "http://localhost:3000"
-            - name: IO_GAIAID_REGISTRY_RES_C_MEDIARESOURCE_MP_REST_URL
+            - name: IO_GAIAID_REGISTRY_RES_C_MEDIARESOURCE_MP_REST_URL # Local endpoint of the datastore container, used to store user's data
               value: "http://localhost:2904"
-            - name: QUARKUS_SWAGGER_UI_ALWAYS_INCLUDE
+            - name: QUARKUS_SWAGGER_UI_ALWAYS_INCLUDE # If you want to export the swagger-ui
               value: "1"
-            - name: IO_GAIAID_VISION_FACE_CAPTURE_URL
+            - name: IO_GAIAID_VISION_FACE_CAPTURE_URL # Redir URL for sending user to vision service for face capture
               value: "https://m.vision.2060.io/face/capture/?token=TOKEN"
             - name: IO_GAIAID_VISION_FACE_VERIFICATION_URL
               value: "https://m.vision.2060.io/face/verification/?token=TOKEN"
-            - name: IO_GAIAID_IDENTITY_DEF_NAME
+            - name: IO_GAIAID_IDENTITY_DEF_NAME # Name of credential
               value: "Identity Card"
-            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_CITIZENID
+            # Identity creation: if you do not set one of the attributes with "unique constraint",
+            # then the unique constraint will be the combination of all attributes and
+            # all attributes will be needed for restoration
+            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_CITIZENID # Does credential include a CitizenID? (unique constraint)
               value: "0"
-            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_FIRSTNAME
+            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_FIRSTNAME # Does credential include a firstname?
               value: "1"
-            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_LASTNAME
+            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_LASTNAME # Does credential include a lastname?
               value: "1"
-            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_AVATARNAME
+            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_AVATARNAME # Does credential include an avatarname? (unique constraint)
               value: "0"
-            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_AVATARPIC
+            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_AVATARPIC # Does credential include an avatar picture?
               value: "0"
-            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_AVATARPIC_MAXDIMENSION
+            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_AVATARPIC_MAXDIMENSION # maxdim of avatar picture
               value: "640"
-            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_BIRTHDATE
+            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_BIRTHDATE # Does credential include a birthdate?
               value: "1"
-            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_BIRTHPLACE
+            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_BIRTHPLACE # Does credential include a birthplace?
               value: "0"
-            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_PHOTO
+            - name: IO_GAIAID_IDENTITY_DEF_CLAIM_PHOTO # Does credential include a photo?
               value: "1"
-            - name: IO_GAIAID_IDENTITY_RESTORE_CLAIM_CITIZENID
+            - name: IO_GAIAID_IDENTITY_RESTORE_CLAIM_CITIZENID # Will the service prompt user for a CitizenID when restoring an Identity?
               value: "0"
-            - name: IO_GAIAID_IDENTITY_RESTORE_CLAIM_FIRSTNAME
+            - name: IO_GAIAID_IDENTITY_RESTORE_CLAIM_FIRSTNAME # Will the service prompt user for a firstname when restoring an Identity?
               value: "1"
-            - name: IO_GAIAID_IDENTITY_RESTORE_CLAIM_LASTNAME
+            - name: IO_GAIAID_IDENTITY_RESTORE_CLAIM_LASTNAME # Will the service prompt user for a lastname when restoring an Identity?
               value: "1"
-            - name: IO_GAIAID_IDENTITY_RESTORE_CLAIM_AVATARNAME
+            - name: IO_GAIAID_IDENTITY_RESTORE_CLAIM_AVATARNAME # Will the service prompt user for an avatarname when restoring an Identity?
               value: "0"
-            - name: IO_GAIAID_IDENTITY_RESTORE_CLAIM_BIRTHDATE
+            - name: IO_GAIAID_IDENTITY_RESTORE_CLAIM_BIRTHDATE # Will the service prompt user for a birthdate when restoring an Identity?
               value: "1"
-            - name: IO_GAIAID_IDENTITY_RESTORE_CLAIM_BIRTHPLACE
+            - name: IO_GAIAID_IDENTITY_RESTORE_CLAIM_BIRTHPLACE # Will the service prompt user for a birthplace when restoring an Identity?
               value: "0"
-            - name: IO_GAIAID_LANGUAGE
+            - name: IO_GAIAID_LANGUAGE # Language of the bot. Supported: en, es, fr. If you need more languages, contribute!
               value: "en"
-            - name: IO_GAIAID_MESSAGES_WELCOME
+            - name: IO_GAIAID_MESSAGES_WELCOME # Welcome message. Also available WELCOME2, WELCOME3
               value: "🌎 Welcome to GaiaID! The place where you can create your Identity, protect it with your biometrics, and easily restore it if you loose your handset."
             - name: IO_GAIAID_MESSAGES_WELCOME2
               value: "This conversational service is provided as a demo service, no guarantee is made regarding uptime and/or data persistence. You can easily delete data of a created Identity by selecting the \"Delete Identity\" option in the contextual menu. Data is removed from our demo server 24h after Identity deletion."
             - name: IO_GAIAID_MESSAGES_WELCOME3
               value: "To get started, use the contextual menu above ↗️, and Create or Restore an Identity."
-            - name: IO_GAIAID_MESSAGES_ROOTMENU_TITLE
+            - name: IO_GAIAID_MESSAGES_ROOTMENU_TITLE # Title of contextual menu
               value: "GaiaID Citizen Registry"
             - name: IO_GAIAID_JMS_MO_QUEUE_NAME
               value: "gaiaid-mo"
@@ -136,7 +139,7 @@ spec:
               value: "/home/data/tmp"
             - name: IO_TWENTYSIXTY_DATASTORE_TMP_LIFETIMEDAYS
               value: "5"
-            - name: IO_TWENTYSIXTY_DATASTORE_REPO_LIFETIMEDAYS
+            - name: IO_TWENTYSIXTY_DATASTORE_REPO_LIFETIMEDAYS # Make sure not to delete user data
               value: "43800"              
             - name: IO_TWENTYSIXTY_DATASTORE_REPO_FS_DIR
               value: "/home/data/repo"

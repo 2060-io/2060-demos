@@ -5,7 +5,7 @@ metadata:
   namespace: demos-main
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
-    nginx.ingress.kubernetes.io/whitelist-source-range: "51.79.89.27/32"
+    nginx.ingress.kubernetes.io/whitelist-source-range: "51.79.89.27/32" # only m.vision.2060.io can access backend and datastore
 spec:
   ingressClassName: nginx
   tls:

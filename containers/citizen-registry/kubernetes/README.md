@@ -7,20 +7,31 @@
 In the [citizen-registry demos](../README.md), we provided demos based on the citizen-registry service.
 In this document, we will learn how to deploy the same demos services in a Kubernetes cluster.
 
-The demo deployment descriptors are these 2 directories: [registry-gaia](registry-gaia) and [registry-avatar](registry-avatar). Let's the [registry-avatar](registry-avatar).
+These 2 directories [registry-gaia](registry-gaia) and [registry-avatar](registry-avatar) contains:
+
+- a Dockerfile to build a simple nginx-based image to expose a simple front-end, including the service's icon. See [github workflows](/.github/workflows) for build info.
+- a k8s directory with kubernetes deployment files we are using for deploying the demos. To deploy the demos, you need a configured nginx ingress on your cluster. Our demos are deployed in ovh.com, but should work out of the box anywhere.
+
+Just clone one of these directories, customize it and you're done!
+
+## Customize configuration
+
+All files in k8s directory should be customized.
+
+### 2060-service-agent container
+
+
+## Deploy
 
 ```
-$ docker login -u io2060 -p $DOCKER_HUB_TOKEN
-$ docker build -f Dockerfile -t $IMAGE_DH:$IMAGE_TAG .
-$ docker push $IMAGE_DH:$IMAGE_TAG
-
+$ kubectl --kubeconfig=~/.kube/config apply -f k8s/namespace.yml
+$ kubectl --kubeconfig=~/.kube/config apply -f k8s/deployment.yml
+$ kubectl --kubeconfig=~/.kube/config apply -f k8s/service.yml
+$ kubectl --kubeconfig=~/.kube/config apply -f k8s/ingress-ds.yml
+$ kubectl --kubeconfig=~/.kube/config apply -f k8s/ingress-public.yml
 ```
 
 
-```
-$ kubectl --kubeconfig=~/.kube/config apply -f /builds/${CI_PROJECT_PATH}/k8s/main/namespace.yml
-$ kubectl --kubeconfig=~/.kube//config apply -f /builds/${CI_PROJECT_PATH}/k8s/main/deployment.yml
-$ kubectl --kubeconfig=~/.kube//config apply -f /builds/${CI_PROJECT_PATH}/k8s/main/service.yml
-$ kubectl --kubeconfig=~/.kube//config apply -f /builds/${CI_PROJECT_PATH}/k8s/main/ingress-ds.yml
-$ kubectl --kubeconfig=~/.kube//config apply -f /builds/${CI_PROJECT_PATH}/k8s/main/ingress-public.yml
-```
+
+
+
