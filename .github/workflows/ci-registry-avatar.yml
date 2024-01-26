@@ -8,7 +8,7 @@ on:
     paths:
     - 'citizen-registry/kubernetes/registry-avatar/**'
     - '.github/workflows/ci-registry-avatar.yml'
-  pull_request:
+  pull_request_target:
     branches: [ main, dev ]
     paths: 
     - 'citizen-registry/kubernetes/registry-avatar/**'

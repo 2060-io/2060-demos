@@ -8,8 +8,8 @@ on:
     paths:
     - 'citizen-registry/**'
     - '.github/workflows/ci-citizen-registry.yml'
-  pull_request:
-    branches: [ main ]
+  pull_request_target:
+    branches: [ main, dev ]
     paths: 
     - 'citizen-registry/**'
     - '.github/workflows/ci-citizen-registry.yml'
