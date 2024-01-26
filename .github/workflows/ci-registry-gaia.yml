@@ -31,5 +31,5 @@ jobs:
           cd containers/citizen-registry/kubernetes/registry-gaia/
           docker login -u $DH_USERNAME -p $DH_TOKEN
           echo "Build and push 2060-demos-gaia-front image for docker hub..."
-          docker build -f Dockerfile -t $IMAGE_NAME:${GITHUB_REF##*/} .
-          docker push $IMAGE_NAME:${GITHUB_REF##*/}
+          docker build -f Dockerfile -t $DH_USERNAME/$IMAGE_NAME:${GITHUB_REF##*/} .
+          docker push $DH_USERNAME/$IMAGE_NAME:${GITHUB_REF##*/}
