@@ -27,4 +27,3 @@ A demo module for building DIDcomm conversational services (chatbots) to issue V
 A example template of a conversational service (chatbot) that requests identity document presentation, and then perform a remote biometric face verification with liveness detection, by comparing the credential embed subject photo with handset user face.
 
 [biometric-authenticator - demo and details here](biometric-authenticator/README.md)
-
