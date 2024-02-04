@@ -51,6 +51,10 @@ public class Session implements Serializable {
 	@Column(columnDefinition="text")
 	private String placeOfBirth;
 	
+	@Column(columnDefinition="text")
+	private String avatarName;
+	
+	
 	private UUID photo;
 	
 	private UUID token;
@@ -129,6 +133,14 @@ public class Session implements Serializable {
 
 	public void setAuthTs(Instant authTs) {
 		this.authTs = authTs;
+	}
+
+	public String getAvatarName() {
+		return avatarName;
+	}
+
+	public void setAvatarName(String avatarName) {
+		this.avatarName = avatarName;
 	}
 
 
