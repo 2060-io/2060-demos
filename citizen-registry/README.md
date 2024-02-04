@@ -38,7 +38,7 @@ a government-like registry service. Test URL: [https://gaiaid.io](https://gaiaid
 
 #### Scan the QR code
 
-![GaiaID](https://gaia.demos.m.2060.io/qr?size=300&bcolor=FFFFFF&balpha=1&fcolor=000000&falpha=1)
+![GaiaID](https://gaia.demos.2060.io/qr?size=300&bcolor=FFFFFF&balpha=1&fcolor=000000&falpha=1)
 
 #### Accept the Invitation
 <kbd>
@@ -80,11 +80,11 @@ Now you verify your face, just to be sure capture was OK.
 
 ### AvatarID Registry
 
-create your Avatar and protect it with your face biometrics. Test URL: [https://avatar.demos.m.2060.io/qr](https://avatar.demos.m.2060.io/qr)
+create your Avatar and protect it with your face biometrics. Test URL: [https://avatar.demos.2060.io/qr](https://avatar.demos.2060.io/qr)
 
 Service is similar to the GaiaID one.
 
-![AvatarID](https://avatar.demos.m.2060.io/qr?size=300&bcolor=FFFFFF&balpha=1&fcolor=000000&falpha=1)
+![AvatarID](https://avatar.demos.2060.io/qr?size=300&bcolor=FFFFFF&balpha=1&fcolor=000000&falpha=1)
 
 ## Deploy your own demo for your country
 

@@ -29,17 +29,17 @@ spec:
             imagePullPolicy: Always
             env:
             - name: AGENT_ENDPOINT # Service endpoint where Wallet will connect. Must accept upgraded https connections.
-              value: "wss://avatar.demos.m.2060.io:443"
+              value: "wss://avatar.demos.2060.io:443"
             - name: AGENT_NAME # Name of the Service, as shown in user's Wallet
               value: "AvatarID"
             - name: AGENT_INVITATION_IMAGE_URL # The icon (avatar) of the service. Here, we put the icon in the front-end container
-              value: "https://i.avatar.demos.m.2060.io/avatar.jpg"
+              value: "https://i.avatar.demos.2060.io/avatar.jpg"
             - name: EVENTS_BASE_URL # Url of the backend that will receive messages, events, etc
               value: "http://localhost:2903"
             - name: AGENT_PUBLIC_DID # DID of the service. **Must** be same domain than service endpoint
-              value: "did:web:avatar.demos.m.2060.io"
+              value: "did:web:avatar.demos.2060.io"
             - name: ANONCREDS_SERVICE_BASE_URL # Base URL of the anoncreds service. **Must** be same domain than service endpoint
-              value: "https://avatar.demos.m.2060.io"
+              value: "https://avatar.demos.2060.io"
             volumeMounts:
             - name: avatar-sa-pv-main
               mountPath: /root/.afj
@@ -55,7 +55,7 @@ spec:
             - name: QUARKUS_HTTP_PORT # Port of the backend
               value: "2903"
             - name: IO_GAIAID_VISION_REDIRDOMAIN # Redirection base domain for the vision service. Used to send face capture/verification result to backend, and to access datastore container
-              value: "avatar.demos.m.2060.io"
+              value: "avatar.demos.2060.io"
             - name: IO_TWENTYSIXTY_SA_RES_C_MESSAGERESOURCE_MP_REST_URL # Local endpoint of the service-agent, for the backend to send messages, credentials,...
               value: "http://localhost:3000"
             - name: IO_TWENTYSIXTY_SA_RES_C_CREDENTIALTYPERESOURCE_MP_REST_URL # Local endpoint of the service-agent, for the credential type querying

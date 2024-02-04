@@ -29,17 +29,17 @@ spec:
             imagePullPolicy: Always
             env:
             - name: AGENT_ENDPOINT # Service endpoint where Wallet will connect. Must accept upgraded https connections.
-              value: "wss://gaia.demos.m.2060.io:443"
+              value: "wss://gaia.demos.2060.io:443"
             - name: AGENT_NAME # Name of the Service, as shown in user's Wallet
               value: "GaiaID Citizen Registry"
             - name: AGENT_INVITATION_IMAGE_URL # The icon (avatar) of the service. Here, we put the icon in the front-end container
-              value: "https://i.gaia.demos.m.2060.io/avatar.png"
+              value: "https://i.gaia.demos.2060.io/avatar.png"
             - name: EVENTS_BASE_URL # Url of the backend that will receive messages, events, etc
               value: "http://localhost:2903"
             - name: AGENT_PUBLIC_DID # DID of the service. **Must** be same domain than service endpoint
-              value: "did:web:gaia.demos.m.2060.io"
+              value: "did:web:gaia.demos.2060.io"
             - name: ANONCREDS_SERVICE_BASE_URL # Base URL of the anoncreds service. **Must** be same domain than service endpoint
-              value: "https://gaia.demos.m.2060.io"
+              value: "https://gaia.demos.2060.io"
             volumeMounts:
             - name: gaia-sa-pv-main
               mountPath: /root/.afj
@@ -53,15 +53,15 @@ spec:
             - name: SERVICE_AGENT_ADMIN_BASE_URL
               value: "http://localhost:3000"
             - name: PUBLIC_BASE_URL
-              value: "https://gaia.demos.m.2060.io"
+              value: "https://gaia.demos.2060.io"
             - name: PNVS_SERVICE_AGENT_ADMIN_BASE_URL
-              value: "https://a.gaia.demos.m.2060.io"
+              value: "https://a.gaia.demos.2060.io"
             - name: DEBUG
               value: "1"
             - name: QUARKUS_HTTP_PORT # Port of the backend
               value: "2903"
             - name: IO_GAIAID_VISION_REDIRDOMAIN # Redirection base domain for the vision service. Used to send face capture/verification result to backend, and to access datastore container
-              value: "gaia.demos.m.2060.io"
+              value: "gaia.demos.2060.io"
             - name: IO_TWENTYSIXTY_SA_RES_C_MESSAGERESOURCE_MP_REST_URL # Local endpoint of the service-agent, for the backend to send messages, credentials,...
               value: "http://localhost:3000"
             - name: IO_TWENTYSIXTY_SA_RES_C_CREDENTIALTYPERESOURCE_MP_REST_URL # Local endpoint of the service-agent, for the credential type querying

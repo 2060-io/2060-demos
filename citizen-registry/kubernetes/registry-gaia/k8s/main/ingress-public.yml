@@ -10,11 +10,11 @@ spec:
   tls:
     - hosts:
         - gaiaid.io
-        - gaia.demos.m.2060.io
-        - i.gaia.demos.m.2060.io
-      secretName: public.gaia.demos.m.2060.io-cert
+        - gaia.demos.2060.io
+        - i.gaia.demos.2060.io
+      secretName: public.gaia.demos.2060.io-cert
   rules:
-    - host: gaia.demos.m.2060.io
+    - host: gaia.demos.2060.io
       http:
         paths:
           - path: /
@@ -24,7 +24,7 @@ spec:
                  name: gaia
                  port:
                    number: 3001
-    - host: i.gaia.demos.m.2060.io
+    - host: i.gaia.demos.2060.io
       http:
         paths:
           - path: /
