@@ -89,12 +89,30 @@ public class Service {
 	@ConfigProperty(name = "io.twentysixty.demos.auth.messages.welcome3")
 	Optional<String> WELCOME3;
 
+	@ConfigProperty(name = "io.twentysixty.demos.auth.messages.auth_success")
+	Optional<String> AUTH_SUCCESS;
+
 	
 	@ConfigProperty(name = "io.twentysixty.demos.auth.messages.nocred")
 	String NO_CRED_MSG;
 
+	@ConfigProperty(name = "io.twentysixty.demos.auth.request.citizenid")
+	Boolean requestCitizenId;
+
 	
-	
+	@ConfigProperty(name = "io.twentysixty.demos.auth.request.firstname")
+	Boolean requestFirstname;
+
+	@ConfigProperty(name = "io.twentysixty.demos.auth.request.lastname")
+	Boolean requestLastname;
+
+	@ConfigProperty(name = "io.twentysixty.demos.auth.request.photo")
+	Boolean requestPhoto;
+
+	@ConfigProperty(name = "io.twentysixty.demos.auth.request.avatarname")
+	Boolean requestAvatarname;
+
+		
 	@ConfigProperty(name = "io.twentysixty.demos.auth.language")
 	Optional<String> language;
 
@@ -155,6 +173,8 @@ public class Service {
 		//entryPointCreate(connectionId, null, null);
 	}
 	
+
+	
 	private BaseMessage getIdentityCredentialRequest(UUID connectionId, UUID threadId) {
 		IdentityProofRequestMessage ip = new IdentityProofRequestMessage();
 		ip.setConnectionId(connectionId);
@@ -164,9 +184,12 @@ public class Service {
 		id.setCredentialDefinitionId(credDef);
 		id.setType("verifiable-credential");
 		List<String> attributes = new ArrayList<String>();
-		attributes.add("firstname");
-		attributes.add("lastname");
-		attributes.add("photo");
+		if (requestCitizenId) attributes.add("citizenId");
+		if (requestFirstname) attributes.add("firstname");
+		if (requestLastname) attributes.add("lastname");
+		if (requestPhoto) attributes.add("photo");
+		if (requestAvatarname) attributes.add("avatarName");
+		attributes.add("issued");
 		id.setAttributes(attributes);
 		
 		List<RequestedProofItem> rpi = new ArrayList<RequestedProofItem>();
@@ -333,14 +356,15 @@ public class Service {
 					SubmitProofItem sp = ipm.getSubmittedProofItems().iterator().next();
 					if (sp.getClaims().size()>0) {
 						
-						UUID identityId = null;
+						String citizenId = null;
 						String firstname = null;
 						String lastname = null;
 						String photo = null;
+						String avatarName = null;
 						
 						for (Claim c: sp.getClaims()) {
-							if (c.getName().equals("id")) {
-								identityId = UUID.fromString(c.getValue());
+							if (c.getName().equals("citizenId")) {
+								citizenId = c.getValue();
 							} else if (c.getName().equals("firstname")) {
 								firstname = c.getValue();
 							} else if (c.getName().equals("lastname")) {
@@ -348,10 +372,14 @@ public class Service {
 							} else if (c.getName().equals("photo")) {
 								photo = c.getValue();
 								logger.info("userInput: photo: " + photo);
-							}
+							} else if (c.getName().equals("avatarName")) {
+								avatarName = c.getValue();
+							} 
 						}
+						session.setCitizenId(citizenId);
 						session.setFirstname(firstname);
 						session.setLastname(lastname);
+						session.setAvatarName(avatarName);
 						
 						if (photo != null) {
 							Pair<String, byte[]> imageData = getImage(photo);
@@ -386,7 +414,10 @@ public class Service {
 					}
 				}
 				if (!sentVerifLink) {
-					mtProducer.sendMessage(TextMessage.build(message.getConnectionId(), message.getThreadId() , this.getMessage("CREDENTIAL_ERROR")));
+					
+					notifySuccess(session.getConnectionId());
+					
+					//mtProducer.sendMessage(TextMessage.build(message.getConnectionId(), message.getThreadId() , this.getMessage("CREDENTIAL_ERROR")));
 
 				}
 			}
@@ -432,7 +463,12 @@ public class Service {
 			try {
 				session.setAuthTs(Instant.now());
 				session = em.merge(session);
-				mtProducer.sendMessage(TextMessage.build(connectionId, null , this.getMessage("AUTHENTICATION_SUCCESS")));
+				if (AUTH_SUCCESS.isPresent()) {
+					mtProducer.sendMessage(TextMessage.build(connectionId, null , AUTH_SUCCESS.get()));
+				} else {
+					mtProducer.sendMessage(TextMessage.build(connectionId, null , this.getMessage("AUTHENTICATION_SUCCESS")));
+				}
+				
 			} catch (Exception e) {
 				logger.error("", e);
 			}
