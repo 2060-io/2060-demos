@@ -9,11 +9,11 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - avatar.demos.m.2060.io
-        - i.avatar.demos.m.2060.io
-      secretName: public.avatar.demos.m.2060.io-cert
+        - avatar.demos.2060.io
+        - i.avatar.demos.2060.io
+      secretName: public.avatar.demos.2060.io-cert
   rules:
-    - host: avatar.demos.m.2060.io
+    - host: avatar.demos.2060.io
       http:
         paths:
           - path: /
@@ -23,7 +23,7 @@ spec:
                  name: avatar
                  port:
                    number: 3001
-    - host: i.avatar.demos.m.2060.io
+    - host: i.avatar.demos.2060.io
       http:
         paths:
           - path: /
