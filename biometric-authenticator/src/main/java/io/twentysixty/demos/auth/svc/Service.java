@@ -143,6 +143,11 @@ public class Service {
 	@ConfigProperty(name = "io.twentysixty.demos.auth.messages.root.menu.option1")
 	String ROOT_MENU_OPTION1;
 	
+	@ConfigProperty(name = "io.twentysixty.demos.auth.messages.root.menu.no_cred")
+	Optional<String> ROOT_MENU_NO_CRED;
+	
+	
+	
 	@ConfigProperty(name = "io.twentysixty.demos.auth.messages.option1")
 	String OPTION1_MSG;
 	
@@ -170,6 +175,7 @@ public class Service {
 		
 		mtProducer.sendMessage(this.getRootMenu(connectionId, null));
 		
+		mtProducer.sendMessage(this.getIdentityCredentialRequest(connectionId, null));
 		//entryPointCreate(connectionId, null, null);
 	}
 	
@@ -507,10 +513,27 @@ public class Service {
 		if ((session == null) || (session.getAuthTs() == null) ){
 			menu.setDescription(getMessage("ROOT_MENU_DEFAULT_DESCRIPTION"));
 			options.add(ContextualMenuItem.build(CMD_ROOT_MENU_AUTHENTICATE, getMessage("ROOT_MENU_AUTHENTICATE"), null));
-			options.add(ContextualMenuItem.build(CMD_ROOT_MENU_NO_CRED, getMessage("ROOT_MENU_NO_CRED"), null));
+			if (ROOT_MENU_NO_CRED.isPresent()) {
+				options.add(ContextualMenuItem.build(CMD_ROOT_MENU_NO_CRED, ROOT_MENU_NO_CRED.get(), null));
+			} else {
+				options.add(ContextualMenuItem.build(CMD_ROOT_MENU_NO_CRED, getMessage("ROOT_MENU_NO_CRED"), null));
+			}
+			
 			
 		} else {
-			menu.setDescription(getMessage("ROOT_MENU_AUTHENTICATED_DESCRIPTION").replaceAll("NAME", session.getFirstname() + " " + session.getLastname()));
+			if ((session.getFirstname() != null) && (session.getLastname() != null)) {
+				menu.setDescription(getMessage("ROOT_MENU_AUTHENTICATED_DESCRIPTION").replaceAll("NAME", session.getFirstname() + " " + session.getLastname()));
+				
+			} else if (session.getAvatarName() != null){
+				menu.setDescription(getMessage("ROOT_MENU_AUTHENTICATED_DESCRIPTION").replaceAll("NAME", session.getAvatarName()));
+				
+			} else if (session.getCitizenId() != null) {
+				menu.setDescription(getMessage("ROOT_MENU_AUTHENTICATED_DESCRIPTION").replaceAll("NAME", session.getCitizenId()));
+				
+			} else {
+				menu.setDescription(getMessage("ROOT_MENU_AUTHENTICATED_DESCRIPTION").replaceAll("NAME", ""));
+				
+			}
 			
 			options.add(ContextualMenuItem.build(CMD_ROOT_MENU_OPTION1, ROOT_MENU_OPTION1, null));
 			options.add(ContextualMenuItem.build(CMD_ROOT_MENU_LOGOUT, this.getMessage("ROOT_MENU_LOGOUT"), null));
