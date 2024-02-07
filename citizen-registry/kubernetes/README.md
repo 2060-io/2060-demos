@@ -21,11 +21,11 @@ All files in k8s directory should be customized.
 ## Deploy
 
 ```
-$ kubectl --kubeconfig=~/.kube/config apply -f k8s/namespace.yml
-$ kubectl --kubeconfig=~/.kube/config apply -f k8s/deployment.yml
-$ kubectl --kubeconfig=~/.kube/config apply -f k8s/service.yml
-$ kubectl --kubeconfig=~/.kube/config apply -f k8s/ingress-ds.yml
-$ kubectl --kubeconfig=~/.kube/config apply -f k8s/ingress-public.yml
+$ kubectl --kubeconfig=~/.kube/config apply -f k8s/main/namespace.yml
+$ kubectl --kubeconfig=~/.kube/config apply -f k8s/main/deployment.yml
+$ kubectl --kubeconfig=~/.kube/config apply -f k8s/main/service.yml
+$ kubectl --kubeconfig=~/.kube/config apply -f k8s/main/ingress-ds.yml
+$ kubectl --kubeconfig=~/.kube/config apply -f k8s/main/ingress-public.yml
 ```
 
 
