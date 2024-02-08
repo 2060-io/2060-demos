@@ -75,6 +75,9 @@ public class Service {
 	@ConfigProperty(name = "io.twentysixty.demos.auth.credential_issuer.avatar")
 	String invitationImageUrl;
 	
+	@ConfigProperty(name = "io.twentysixty.demos.auth.credential_issuer.label")
+	String invitationLabel;
+	
 	
 	
 	@ConfigProperty(name = "io.twentysixty.demos.auth.id_credential_def")
@@ -357,68 +360,80 @@ public class Service {
 				}
 				boolean sentVerifLink = false;
 				IdentityProofSubmitMessage ipm = (IdentityProofSubmitMessage) message;
+				
 				if (ipm.getSubmittedProofItems().size()>0) {
 					
 					SubmitProofItem sp = ipm.getSubmittedProofItems().iterator().next();
-					if (sp.getClaims().size()>0) {
-						
-						String citizenId = null;
-						String firstname = null;
-						String lastname = null;
-						String photo = null;
-						String avatarName = null;
-						
-						for (Claim c: sp.getClaims()) {
-							if (c.getName().equals("citizenId")) {
-								citizenId = c.getValue();
-							} else if (c.getName().equals("firstname")) {
-								firstname = c.getValue();
-							} else if (c.getName().equals("lastname")) {
-								lastname = c.getValue();
-							} else if (c.getName().equals("photo")) {
-								photo = c.getValue();
-								logger.info("userInput: photo: " + photo);
-							} else if (c.getName().equals("avatarName")) {
-								avatarName = c.getValue();
-							} 
-						}
-						session.setCitizenId(citizenId);
-						session.setFirstname(firstname);
-						session.setLastname(lastname);
-						session.setAvatarName(avatarName);
-						
-						if (photo != null) {
-							Pair<String, byte[]> imageData = getImage(photo);
-							if (imageData != null) {
-								UUID mediaUUID = UUID.randomUUID();
-								mediaResource.createOrUpdate(mediaUUID, 1, mediaUUID.toString());
-								
-								
-								File file = new File(System.getProperty("java.io.tmpdir") + "/" + mediaUUID);
-								
-								FileOutputStream fos = new FileOutputStream(file);
-								fos.write(imageData.getRight());
-								fos.flush();
-								fos.close();
-								
-								Resource r = new Resource();
-								r.chunk = new FileInputStream(file);
-								mediaResource.uploadChunk(mediaUUID, 0, mediaUUID.toString(), r);
-								
-								file.delete();
-								session.setPhoto(mediaUUID);
-								session.setToken(UUID.randomUUID());
-								em.merge(session);
-								
-								mtProducer.sendMessage(generateFaceVerificationMediaMessage(message.getConnectionId(), message.getThreadId(), session.getToken().toString()));
-								
-								sentVerifLink = true;
+					
+					if ((sp.getVerified() != null) && (sp.getVerified())) {
+						if (sp.getClaims().size()>0) {
+							
+							String citizenId = null;
+							String firstname = null;
+							String lastname = null;
+							String photo = null;
+							String avatarName = null;
+							
+							for (Claim c: sp.getClaims()) {
+								if (c.getName().equals("citizenId")) {
+									citizenId = c.getValue();
+								} else if (c.getName().equals("firstname")) {
+									firstname = c.getValue();
+								} else if (c.getName().equals("lastname")) {
+									lastname = c.getValue();
+								} else if (c.getName().equals("photo")) {
+									photo = c.getValue();
+									logger.info("userInput: photo: " + photo);
+								} else if (c.getName().equals("avatarName")) {
+									avatarName = c.getValue();
+								} 
 							}
+							session.setCitizenId(citizenId);
+							session.setFirstname(firstname);
+							session.setLastname(lastname);
+							session.setAvatarName(avatarName);
+							
+							if (photo != null) {
+								Pair<String, byte[]> imageData = getImage(photo);
+								if (imageData != null) {
+									UUID mediaUUID = UUID.randomUUID();
+									mediaResource.createOrUpdate(mediaUUID, 1, mediaUUID.toString());
+									
+									
+									File file = new File(System.getProperty("java.io.tmpdir") + "/" + mediaUUID);
+									
+									FileOutputStream fos = new FileOutputStream(file);
+									fos.write(imageData.getRight());
+									fos.flush();
+									fos.close();
+									
+									Resource r = new Resource();
+									r.chunk = new FileInputStream(file);
+									mediaResource.uploadChunk(mediaUUID, 0, mediaUUID.toString(), r);
+									
+									file.delete();
+									session.setPhoto(mediaUUID);
+									session.setToken(UUID.randomUUID());
+									em.merge(session);
+									
+									mtProducer.sendMessage(generateFaceVerificationMediaMessage(message.getConnectionId(), message.getThreadId(), session.getToken().toString()));
+									
+									sentVerifLink = true;
+								}
+							}
+							
+							
 						}
+					}
+					} else {
+						// user do not have the required credential, send invitation link
 						
+						mtProducer.sendMessage(TextMessage.build(message.getConnectionId(), message.getThreadId() , NO_CRED_MSG));
+						mtProducer.sendMessage(this.getInvitationMessage(message.getConnectionId(), message.getThreadId()));
 						
 					}
-				}
+					
+					
 				if (!sentVerifLink) {
 					
 					notifySuccess(session.getConnectionId());
@@ -438,15 +453,7 @@ public class Service {
 			} else if (content.equals(CMD_ROOT_MENU_NO_CRED.toString())) {
 				
 				mtProducer.sendMessage(TextMessage.build(message.getConnectionId(), message.getThreadId() , NO_CRED_MSG));
-				
-				
-				InvitationMessage invitation = new InvitationMessage();
-				invitation.setConnectionId(message.getConnectionId());
-				invitation.setThreadId(message.getThreadId());
-				invitation.setImageUrl(invitationImageUrl);
-				invitation.setDid(credentialIssuer);
-				
-				mtProducer.sendMessage(invitation);
+				mtProducer.sendMessage(this.getInvitationMessage(message.getConnectionId(), message.getThreadId()));
 
 			} else if (content.equals(CMD_ROOT_MENU_LOGOUT.toString())) {
 				if (session != null) {
@@ -460,6 +467,17 @@ public class Service {
 			}
 		}
 		mtProducer.sendMessage(this.getRootMenu(message.getConnectionId(), session));
+	}
+	
+	
+	private BaseMessage getInvitationMessage(UUID connectionId, UUID threadId) {
+		InvitationMessage invitation = new InvitationMessage();
+		invitation.setConnectionId(connectionId);
+		invitation.setThreadId(threadId);
+		invitation.setImageUrl(invitationImageUrl);
+		invitation.setDid(credentialIssuer);
+		invitation.setLabel(invitationLabel);
+		return invitation;
 	}
 
 	@Transactional
