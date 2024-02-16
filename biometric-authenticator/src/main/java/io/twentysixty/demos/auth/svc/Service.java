@@ -359,6 +359,7 @@ public class Service {
 					
 				}
 				boolean sentVerifLink = false;
+				boolean credentialReceived = false;
 				IdentityProofSubmitMessage ipm = (IdentityProofSubmitMessage) message;
 				
 				if (ipm.getSubmittedProofItems().size()>0) {
@@ -424,23 +425,24 @@ public class Service {
 							
 							
 						}
+						credentialReceived = true;
 					}
-					} else {
-						// user do not have the required credential, send invitation link
-						
-						mtProducer.sendMessage(TextMessage.build(message.getConnectionId(), message.getThreadId() , NO_CRED_MSG));
-						mtProducer.sendMessage(this.getInvitationMessage(message.getConnectionId(), message.getThreadId()));
-						
 					}
 					
-					
-				if (!sentVerifLink) {
-					
-					notifySuccess(session.getConnectionId());
-					
-					//mtProducer.sendMessage(TextMessage.build(message.getConnectionId(), message.getThreadId() , this.getMessage("CREDENTIAL_ERROR")));
+				if (credentialReceived) {
+					if (!sentVerifLink) {
+						
+						notifySuccess(session.getConnectionId());
+						
+						//mtProducer.sendMessage(TextMessage.build(message.getConnectionId(), message.getThreadId() , this.getMessage("CREDENTIAL_ERROR")));
 
+					}
+				} else {
+					mtProducer.sendMessage(TextMessage.build(message.getConnectionId(), message.getThreadId() , NO_CRED_MSG));
+					mtProducer.sendMessage(this.getInvitationMessage(message.getConnectionId(), message.getThreadId()));
+					
 				}
+				
 			}
 			
 		}
