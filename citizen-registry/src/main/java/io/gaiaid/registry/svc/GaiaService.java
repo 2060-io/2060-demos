@@ -974,7 +974,7 @@ public class GaiaService {
 				Predicate predicate = builder.equal(root.get("birthdate"), session.getBirthdate());
 				allPredicates.add(predicate);
 			}
-			if (restoreBirthdateClaim) {
+			if (restoreBirthplaceClaim) {
 				Predicate predicate = builder.equal(root.get("placeOfBirth"), session.getPlaceOfBirth());
 				allPredicates.add(predicate);
 			}
@@ -1151,7 +1151,7 @@ public class GaiaService {
 			allPredicates.add(predicate);
 			if (debug) logger.info("identityAlreadyExists: birthdate: " + session.getBirthdate());
 		}
-		if (restoreBirthdateClaim) {
+		if (restoreBirthplaceClaim) {
 			Predicate predicate = builder.equal(root.get("placeOfBirth"), session.getPlaceOfBirth());
 			allPredicates.add(predicate);
 			if (debug) logger.info("identityAlreadyExists: placeOfBirth: " + session.getPlaceOfBirth());
