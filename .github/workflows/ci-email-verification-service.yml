@@ -8,11 +8,6 @@ on:
     paths:
     - 'email-verification-service/**'
     - '.github/workflows/ci-email-verification-service.yml'
-  pull_request_target:
-    branches: [ main, dev ]
-    paths: 
-    - 'email-verification-service/**'
-    - '.github/workflows/ci-email-verification-service.yml'
   workflow_dispatch:
 
 env:

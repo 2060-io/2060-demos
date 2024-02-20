@@ -8,11 +8,6 @@ on:
     paths:
     - 'citizen-registry/kubernetes/registry-gaia/**'
     - '.github/workflows/ci-registry-gaia.yml'
-  pull_request_target:
-    branches: [ main, dev ]
-    paths: 
-    - 'citizen-registry/kubernetes/registry-gaia/**'
-    - '.github/workflows/ci-registry-gaia.yml'
   workflow_dispatch:
 
 env:
