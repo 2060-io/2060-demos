@@ -8,11 +8,6 @@ on:
     paths:
     - 'biometric-authenticator/**'
     - '.github/workflows/ci-biometric-authenticator.yml'
-  pull_request_target:
-    branches: [ main, dev ]
-    paths: 
-    - 'biometric-authenticator/**'
-    - '.github/workflows/ci-biometric-authenticator.yml'
   workflow_dispatch:
 
 env:

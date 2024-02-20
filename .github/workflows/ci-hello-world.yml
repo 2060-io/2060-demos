@@ -8,11 +8,6 @@ on:
     paths:
     - 'hello-world/**'
     - '.github/workflows/ci-hello-world.yml'
-  pull_request_target:
-    branches: [ main, dev ]
-    paths: 
-    - 'containers/hello-world/**'
-    - '.github/workflows/ci-hello-world.yml'
   workflow_dispatch:
 
 env:
