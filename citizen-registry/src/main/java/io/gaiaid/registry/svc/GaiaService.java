@@ -1155,9 +1155,17 @@ public class GaiaService {
 		query.orderBy(builder.desc(root.get("id")));
 		Query q = em.createQuery(query);
 		
-		Identity res = (Identity) q.getResultList().stream().findFirst().orElse(null);
+		List<Identity> founds = q.getResultList();
+		if (debug) {
+			try {
+				logger.info("identityAlreadyExists: found: " + JsonUtil.serialize(founds, false));
+			} catch (JsonProcessingException e) {
+				logger.error("", e);
+			}
+		}
 		
-		return (res!=null);
+		
+		return (founds.size()>0);
 		
 	}
 	
