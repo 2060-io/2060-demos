@@ -1126,28 +1126,35 @@ public class GaiaService {
 		if (restoreCitizenidClaim) {
 			Predicate predicate = builder.equal(root.get("citizenId"), session.getCitizenId());
 			allPredicates.add(predicate);
+			if (debug) logger.info("identityAlreadyExists: citizenId: " + session.getCitizenId());
 		}
 		
 		if (restoreFirstnameClaim) {
 			Predicate predicate = builder.equal(root.get("firstname"), session.getFirstname());
 			allPredicates.add(predicate);
+			
+			if (debug) logger.info("identityAlreadyExists: firstname: " + session.getFirstname());
 		}
 		if (restoreLastnameClaim) {
 			Predicate predicate = builder.equal(root.get("lastname"), session.getLastname());
 			allPredicates.add(predicate);
+			if (debug) logger.info("identityAlreadyExists: lastname: " + session.getLastname());
 		}
 		if (restoreAvatarnameClaim) {
 			Predicate predicate = builder.equal(root.get("avatarname"), session.getAvatarname());
 			allPredicates.add(predicate);
+			if (debug) logger.info("identityAlreadyExists: avatarname: " + session.getAvatarname());
 		}
 		
 		if (restoreBirthdateClaim) {
 			Predicate predicate = builder.equal(root.get("birthdate"), session.getBirthdate());
 			allPredicates.add(predicate);
+			if (debug) logger.info("identityAlreadyExists: birthdate: " + session.getBirthdate());
 		}
 		if (restoreBirthdateClaim) {
 			Predicate predicate = builder.equal(root.get("placeOfBirth"), session.getPlaceOfBirth());
 			allPredicates.add(predicate);
+			if (debug) logger.info("identityAlreadyExists: placeOfBirth: " + session.getPlaceOfBirth());
 		}
 		
 		query.where(builder.and(allPredicates.toArray(new Predicate[allPredicates.size()])));
@@ -1465,7 +1472,7 @@ public class GaiaService {
 					birthDate = LocalDate.from(df.parse(content));
 					session.setBirthdate(birthDate);
 					session.setCreateStep(getNextCreateStep(session.getCreateStep()));
-					
+					session = em.merge(session);
 				} catch (Exception e) {
 					logger.error("", e);
 					mtProducer.sendMessage(TextMessage.build(connectionId, threadId, getMessage("BIRTHDATE_ERROR")));
